@@ -1,0 +1,26 @@
+
+${AnsiColor.RED}             ${AnsiColor.BLUE}            ${AnsiColor.BRIGHT_YELLOW}      _____    ${AnsiColor.BRIGHT_GREEN}      ___     ${AnsiColor.WHITE}      ___
+${AnsiColor.RED}      ___    ${AnsiColor.BLUE}    ___     ${AnsiColor.BRIGHT_YELLOW}     /  /::\   ${AnsiColor.BRIGHT_GREEN}     /  /\    ${AnsiColor.WHITE}     /  /\
+${AnsiColor.RED}     /__/\   ${AnsiColor.BLUE}   /  /\    ${AnsiColor.BRIGHT_YELLOW}    /  /:/\:\  ${AnsiColor.BRIGHT_GREEN}    /  /:/_   ${AnsiColor.WHITE}    /  /::\
+${AnsiColor.RED}     \  \:\  ${AnsiColor.BLUE}  /  /:/    ${AnsiColor.BRIGHT_YELLOW}   /  /:/  \:\ ${AnsiColor.BRIGHT_GREEN}   /  /:/ /\  ${AnsiColor.WHITE}   /  /:/\:\
+${AnsiColor.RED}      \  \:\ ${AnsiColor.BLUE} /__/::\    ${AnsiColor.BRIGHT_YELLOW}  /__/:/ \__\:|${AnsiColor.BRIGHT_GREEN}  /  /:/ /:/_ ${AnsiColor.WHITE}  /  /:/  \:\
+${AnsiColor.RED}  ___  \__\:\${AnsiColor.BLUE} \__\/\:\__ ${AnsiColor.BRIGHT_YELLOW}  \  \:\ /  /:/${AnsiColor.BRIGHT_GREEN} /__/:/ /:/ /\${AnsiColor.WHITE} /__/:/ \__\:\
+${AnsiColor.RED} /__/\ |  |:|${AnsiColor.BLUE}    \  \:\/\${AnsiColor.BRIGHT_YELLOW}   \  \:\  /:/ ${AnsiColor.BRIGHT_GREEN} \  \:\/:/ /:/${AnsiColor.WHITE} \  \:\ /  /:/
+${AnsiColor.RED} \  \:\|  |:|${AnsiColor.BLUE}     \__\::/${AnsiColor.BRIGHT_YELLOW}    \  \:\/:/  ${AnsiColor.BRIGHT_GREEN}  \  \::/ /:/ ${AnsiColor.WHITE}  \  \:\  /:/
+${AnsiColor.RED}  \  \:\__|:|${AnsiColor.BLUE}     /__/:/ ${AnsiColor.BRIGHT_YELLOW}     \  \::/   ${AnsiColor.BRIGHT_GREEN}   \  \:\/:/  ${AnsiColor.WHITE}   \  \:\/:/
+${AnsiColor.RED}   \__\::::/ ${AnsiColor.BLUE}     \__\/  ${AnsiColor.BRIGHT_YELLOW}      \__\/    ${AnsiColor.BRIGHT_GREEN}    \  \::/   ${AnsiColor.WHITE}    \  \::/
+${AnsiColor.RED}       ~~~~  ${AnsiColor.BLUE}            ${AnsiColor.BRIGHT_YELLOW}               ${AnsiColor.BRIGHT_GREEN}     \__\/    ${AnsiColor.WHITE}     \__\/
+${AnsiColor.BRIGHT_CYAN}              ${AnsiColor.BRIGHT_GREEN}      ___     ${AnsiColor.BLUE}             ${AnsiColor.BRIGHT_YELLOW}     ___     ${AnsiColor.RED}      ___
+${AnsiColor.BRIGHT_CYAN}      ___     ${AnsiColor.BRIGHT_GREEN}     /__/\    ${AnsiColor.BLUE}    ___      ${AnsiColor.BRIGHT_YELLOW}    /  /\    ${AnsiColor.RED}     /  /\
+${AnsiColor.BRIGHT_CYAN}     /  /\    ${AnsiColor.BRIGHT_GREEN}     \  \:\   ${AnsiColor.BLUE}   /  /\     ${AnsiColor.BRIGHT_YELLOW}   /  /::|   ${AnsiColor.RED}    /  /::|
+${AnsiColor.BRIGHT_CYAN}    /  /::\   ${AnsiColor.BRIGHT_GREEN}      \  \:\  ${AnsiColor.BLUE}  /  /:/     ${AnsiColor.BRIGHT_YELLOW}  /  /:/:|   ${AnsiColor.RED}   /  /:/:|
+${AnsiColor.BRIGHT_CYAN}   /  /:/\:\  ${AnsiColor.BRIGHT_GREEN}  ___  \  \:\ ${AnsiColor.BLUE} /__/::\     ${AnsiColor.BRIGHT_YELLOW} /  /:/|:|__ ${AnsiColor.RED}  /  /:/|:|__
+${AnsiColor.BRIGHT_CYAN}  /  /:/~/::\ ${AnsiColor.BRIGHT_GREEN} /__/\  \__\:\${AnsiColor.BLUE} \__\/\:\__  ${AnsiColor.BRIGHT_YELLOW}/__/:/ |:| /\${AnsiColor.RED} /__/:/ |:| /\
+${AnsiColor.BRIGHT_CYAN} /__/:/ /:/\:\${AnsiColor.BRIGHT_GREEN} \  \:\ /  /:/${AnsiColor.BLUE}    \  \:\/\ ${AnsiColor.BRIGHT_YELLOW}\__\/  |:|/:/${AnsiColor.RED} \__\/  |:|/:/
+${AnsiColor.BRIGHT_CYAN} \  \:\/:/__\/${AnsiColor.BRIGHT_GREEN}  \  \:\  /:/ ${AnsiColor.BLUE}     \__\::/ ${AnsiColor.BRIGHT_YELLOW}    |  |:/:/ ${AnsiColor.RED}     |  |:/:/
+${AnsiColor.BRIGHT_CYAN}  \  \::/     ${AnsiColor.BRIGHT_GREEN}   \  \:\/:/  ${AnsiColor.BLUE}     /__/:/  ${AnsiColor.BRIGHT_YELLOW}    |  |::/  ${AnsiColor.RED}     |  |::/
+${AnsiColor.BRIGHT_CYAN}   \__\/      ${AnsiColor.BRIGHT_GREEN}    \  \::/   ${AnsiColor.BLUE}     \__\/   ${AnsiColor.BRIGHT_YELLOW}    |  |:/   ${AnsiColor.RED}     |  |:/
+${AnsiColor.BRIGHT_CYAN}              ${AnsiColor.BRIGHT_GREEN}     \__\/    ${AnsiColor.BLUE}             ${AnsiColor.BRIGHT_YELLOW}    |__|/    ${AnsiColor.RED}     |__|/
+
+Autor: Raúl Martín
+Tutor: Jaime Urquiza

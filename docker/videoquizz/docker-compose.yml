@@ -1,0 +1,59 @@
+# This file describes the required environment in order for the server to work properly
+# This file can be placed in any directory, and the environment can be started using the "docker-compose up" command.
+
+version: '3'
+services:
+
+  mysql:
+    # Provides persistent storage to the APP
+
+    image: mysql:5
+    container_name: mysql-spring
+    #command: --innodb-large-prefix=on
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=videoquizz
+      - MYSQL_USER=videoquizz
+      - MYSQL_PASSWORD=kpepinodeaplicacion
+
+  redis:
+    # In memory database, shared data will be loaded from the
+    # relational DB to the Redis cache, where it can be accessed from the rest of services/clients
+    container_name: redis
+    image: "redis:alpine"
+
+  rabbitmq:
+    # Provides the asynchronous messaging functionality.
+    # Management interface enabled on port 15672, can be disabled changing the image tag from "management" to "latest"
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  spring-repository:
+    # Core app, depends on the rest of components. Exposes API on port 8080.
+    depends_on:
+      - mysql
+      - redis
+      - rabbitmq
+    image: extremoblando/videoquizz:latest
+    container_name: springbackend
+    ports:
+      - 8080:8080
+    links:
+      - mysql
+      - redis
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/videoquizz?useSSL=false
+      - SPRING_DATASOURCE_USERNAME=videoquizz
+      - SPRING_DATASOURCE_PASSWORD=kpepinodeaplicacion
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_REDIS_HOST=redis
+      - MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS=always
+      - LOADER_PATH=/plugins
+    volumes:
+      - ./plugins:/plugins
+
+    # Explicitly wait until MySQL is ready to accept connections.
+    # Because the relational DB is the slowest to start up, we do not need to explicitly wait for the rest of services.
+    command: ["./wait-for-it.sh", "mysql:3306", "--", "asd", "asd"]
