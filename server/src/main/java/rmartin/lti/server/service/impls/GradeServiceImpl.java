@@ -5,7 +5,7 @@ import rmartin.lti.server.service.KeyService;
 import rmartin.lti.server.service.repos.ContextRepository;
 import rmartin.lti.server.model.ContextResult;
 import rmartin.lti.server.model.LTILaunchRequest;
-import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.model.LTIContext;
 import rmartin.lti.server.service.GradeService;
 import oauth.signpost.exception.OAuthException;
 import org.imsglobal.pox.IMSPOXRequest;
@@ -27,7 +27,7 @@ public class GradeServiceImpl implements GradeService {
         this.contextRepository = contextRepository;
     }
 
-    public void gradeActivity(LaunchContext context, String score) {
+    public void gradeActivity(LTIContext context, String score) {
         LTILaunchRequest lastRequest = context.getLastRequest();
         String consumerKey = lastRequest.getOauthConsumerKey();
         String secretKey = keyService.getSecretForKey(consumerKey);

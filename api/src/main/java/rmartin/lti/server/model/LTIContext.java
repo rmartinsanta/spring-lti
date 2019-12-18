@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-public class LaunchContext {
+public class LTIContext {
 
     @Id
     @GeneratedValue
@@ -55,10 +55,10 @@ public class LaunchContext {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<LTILaunchRequest> launchRequests = new ArrayList<>();
 
-    protected LaunchContext() {
+    protected LTIContext() {
     }
 
-    public LaunchContext(LTILaunchRequest launchRequest) {
+    public LTIContext(LTILaunchRequest launchRequest) {
         this.launchRequests.add(launchRequest);
         launchRequest.setMyContext(this);
         this.creat = Instant.now().toEpochMilli();

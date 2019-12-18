@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.model.LTIContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -20,7 +20,7 @@ public class JacksonConfiguration {
         mapper.registerModule(new ParameterNamesModule());
         mapper.registerModule(new JavaTimeModule());
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        Jackson2JsonRedisSerializer<LaunchContext> serializer = new Jackson2JsonRedisSerializer<>(LaunchContext.class);
+        Jackson2JsonRedisSerializer<LTIContext> serializer = new Jackson2JsonRedisSerializer<>(LTIContext.class);
         serializer.setObjectMapper(mapper);
         return serializer;
     }

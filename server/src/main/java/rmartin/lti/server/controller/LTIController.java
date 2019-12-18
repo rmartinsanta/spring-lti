@@ -14,7 +14,7 @@ import rmartin.lti.api.exception.ActivityInsufficientPermissionException;
 import rmartin.lti.api.exception.ActivityNotFoundException;
 import rmartin.lti.api.exception.InvalidCredentialsException;
 import rmartin.lti.server.model.LTILaunchRequest;
-import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.model.LTIContext;
 import rmartin.lti.server.security.LTISigned;
 import rmartin.lti.server.service.*;
 import rmartin.lti.server.service.impls.ContextServiceImpl;
@@ -103,7 +103,7 @@ public class LTIController {
         }
 
         // We have the data, is it from an existing user? is it the first visit?
-        LaunchContext context = contextService.getOrInitialize(launchRequest);
+        LTIContext context = contextService.getOrInitialize(launchRequest);
 
         // Push data to Redis
         String publicId = launchRequest.getPublicId();

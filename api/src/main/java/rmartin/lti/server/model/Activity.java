@@ -26,12 +26,12 @@ public abstract class Activity {
     public abstract String getactivityId();
 
     // TODO review & refactor this, use service?
-    protected LaunchContext getLaunchContext(String id) {
-        LaunchContext context = puller.getDataLaunch(id);
+    protected LTIContext getLaunchContext(String id) {
+        LTIContext context = puller.getDataLaunch(id);
         return context;
     }
 
-    protected void grade(LaunchContext context, float score){
+    protected void grade(LTIContext context, float score){
         if(cannotRetry(context)){
             throw new GradeException("Activity does not allow retrying and user has already been graded, context id: "+context.getId());
         }
@@ -48,7 +48,7 @@ public abstract class Activity {
      * @param context Context to check
      * @return false if the user can retry, true if the user can not retry
      */
-    protected boolean cannotRetry(LaunchContext context) {
+    protected boolean cannotRetry(LTIContext context) {
         return context.getStatus() == ContextStatus.SCORE_SUBMITTED && !context.getConfig().getBool(BaseConfig.CAN_RETRY);
     }
 

@@ -2,21 +2,21 @@ package rmartin.lti.server.model;
 
 public class MessageDTO {
 
-    private LaunchContext context;
+    private LTIContext context;
     private double score;
 
     protected MessageDTO() {  }
 
-    public MessageDTO(LaunchContext context, double score) {
+    public MessageDTO(LTIContext context, double score) {
         this.context = context;
         this.score = score;
     }
 
-    public LaunchContext getContext() {
+    public LTIContext getContext() {
         return context;
     }
 
-    public void setContext(LaunchContext context) {
+    public void setContext(LTIContext context) {
         this.context = context;
     }
 

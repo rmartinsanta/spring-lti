@@ -1,7 +1,7 @@
 package rmartin.lti.server.service;
 
-import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.model.LTIContext;
 
 public interface GradeService {
-    void gradeActivity(LaunchContext request, String score);
+    void gradeActivity(LTIContext request, String score);
 }

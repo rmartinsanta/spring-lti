@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import rmartin.lti.server.model.Activity;
 import rmartin.lti.server.model.ActivityConfig;
-import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.model.LTIContext;
 import rmartin.lti.server.service.ConfigService;
 import rmartin.lti.server.service.ContextService;
 import rmartin.lti.server.service.IOUtils;
@@ -39,7 +39,7 @@ public class TestActivityController extends Activity {
     @GetMapping("/{id}")
     public ModelAndView handleActivityLaunch(ModelAndView modelView, @PathVariable String id){
 
-        LaunchContext context = this.getLaunchContext(id);
+        LTIContext context = this.getLaunchContext(id);
         modelView.setViewName("TestActivity/index");
 
         modelView.addObject("canSubmit", !cannotRetry(context));
@@ -71,7 +71,7 @@ public class TestActivityController extends Activity {
             return "ScoreMustBeBetween0And1";
         }
 
-        LaunchContext context = this.contextService.get(secretKey);
+        LTIContext context = this.contextService.get(secretKey);
         if(context == null){
             return "KeyDoesNotExistOrHasAlreadyBeenUsed";
         }

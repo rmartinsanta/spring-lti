@@ -1,6 +1,6 @@
 package rmartin.lti.server.service.impls;
 
-import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.model.LTIContext;
 import rmartin.lti.server.service.Redis;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,10 @@ public class RedisLaunchContextImpl implements Redis {
     @Value("${server.context.expiresIn}")
     private long expiresInMillis;
 
-    private RedisTemplate<String, LaunchContext> redisContexts;
+    private RedisTemplate<String, LTIContext> redisContexts;
 
-    private BoundHashOperations<String, String, LaunchContext> launches;
-    private BoundHashOperations<String, String, LaunchContext> pendingContexts;
+    private BoundHashOperations<String, String, LTIContext> launches;
+    private BoundHashOperations<String, String, LTIContext> pendingContexts;
 
     private RedisTemplate<String, String> redisTokens;
 
@@ -57,8 +57,8 @@ public class RedisLaunchContextImpl implements Redis {
     }
 
     @Override
-    public LaunchContext getDataLaunch(String id){
-        LaunchContext context = launches.get(id);
+    public LTIContext getDataLaunch(String id){
+        LTIContext context = launches.get(id);
 
         if(context == null){
             throw new IllegalArgumentException("Invalid context: "+id);
@@ -73,13 +73,13 @@ public class RedisLaunchContextImpl implements Redis {
     }
 
     @Override
-    public void saveForLaunch(LaunchContext context, String key){
+    public void saveForLaunch(LTIContext context, String key){
         launches.put(key, context);
         //this.setExpire("Context_"+context.getId());
         this.setExpire(key);
     }
 
-    public void saveForClient(LaunchContext context, String key){
+    public void saveForClient(LTIContext context, String key){
         pendingContexts.put(key, context);
     }
 
@@ -89,9 +89,9 @@ public class RedisLaunchContextImpl implements Redis {
     }
 
     @Override
-    public LaunchContext getDataClient(String key) {
+    public LTIContext getDataClient(String key) {
         if(this.pendingContexts.hasKey(key)){
-            LaunchContext context = this.pendingContexts.get(key);
+            LTIContext context = this.pendingContexts.get(key);
             this.pendingContexts.delete(key);
             return context;
         }

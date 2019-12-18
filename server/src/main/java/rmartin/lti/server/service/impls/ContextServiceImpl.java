@@ -3,7 +3,7 @@ package rmartin.lti.server.service.impls;
 import rmartin.lti.server.service.Redis;
 import rmartin.lti.server.service.repos.ContextRepository;
 import rmartin.lti.server.model.LTILaunchRequest;
-import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.model.LTIContext;
 import rmartin.lti.server.service.ConfigService;
 import rmartin.lti.server.service.ContextService;
 import rmartin.lti.server.service.SecretService;
@@ -31,8 +31,8 @@ public class ContextServiceImpl implements ContextService {
         this.redis = redis;
     }
 
-    public LaunchContext getOrInitialize(LTILaunchRequest ltiLaunchRequest){
-        LaunchContext context = contextRepository.findByClientAndUserIdAndRolesAndResourceId(
+    public LTIContext getOrInitialize(LTILaunchRequest ltiLaunchRequest){
+        LTIContext context = contextRepository.findByClientAndUserIdAndRolesAndResourceId(
                 ltiLaunchRequest.getOauthConsumerKey(),
                 ltiLaunchRequest.getUserId(),
                 ltiLaunchRequest.getRoles(),
@@ -42,12 +42,11 @@ public class ContextServiceImpl implements ContextService {
         String key = secretService.generateSecret();
         ltiLaunchRequest.setPublicId(key);
 
-        if(context != null) {
+        if(context != null && !context.getLaunchRequests().contains(ltiLaunchRequest)) {
             context.addLaunchRequest(ltiLaunchRequest);
             context.setModified(Instant.now().toEpochMilli());
-
         } else {
-            context = new LaunchContext(ltiLaunchRequest);
+            context = new LTIContext(ltiLaunchRequest);
         }
 
         context.setConfig(configService.getOrInitialize(ltiLaunchRequest));
@@ -55,13 +54,13 @@ public class ContextServiceImpl implements ContextService {
         return this.contextRepository.save(context);
     }
 
-    public String store(LaunchContext c){
+    public String store(LTIContext c){
         String secretKey = this.secretService.generateSecret();
         this.redis.saveForClient(c, secretKey);
         return secretKey;
     }
 
-    public LaunchContext get(String key){
+    public LTIContext get(String key){
         return redis.getDataClient(key);
     }
 }

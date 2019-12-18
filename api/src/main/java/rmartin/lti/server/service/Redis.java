@@ -1,13 +1,13 @@
 package rmartin.lti.server.service;
 
-import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.model.LTIContext;
 
 public interface Redis {
-    LaunchContext getDataLaunch(String id);
+    LTIContext getDataLaunch(String id);
 
-    void saveForLaunch(LaunchContext context, String key);
+    void saveForLaunch(LTIContext context, String key);
 
-    void saveForClient(LaunchContext context, String key);
+    void saveForClient(LTIContext context, String key);
 
-    LaunchContext getDataClient(String key);
+    LTIContext getDataClient(String key);
 }

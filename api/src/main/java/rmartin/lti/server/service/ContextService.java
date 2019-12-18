@@ -1,15 +1,31 @@
 package rmartin.lti.server.service;
 
 import rmartin.lti.server.model.LTILaunchRequest;
-import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.model.LTIContext;
 
+/**
+ * Operations related to the current LTIContext
+ */
 public interface ContextService {
 
-    // TODO javadocs
+    /**
+     * Retrieve the context associated with a LTIRequest
+     * @param ltiLaunchRequest
+     * @return
+     */
+    LTIContext getOrInitialize(LTILaunchRequest ltiLaunchRequest);
 
-    LaunchContext getOrInitialize(LTILaunchRequest ltiLaunchRequest);
+    /**
+     * Store a
+     * @param c
+     * @return
+     */
+    String store(LTIContext c);
 
-    String store(LaunchContext c);
-
-    LaunchContext get(String key);
+    /**
+     * Retrieve a LTIContext by id/key, used by activities when user is redirected
+     * @param key
+     * @return
+     */
+    LTIContext get(String key);
 }

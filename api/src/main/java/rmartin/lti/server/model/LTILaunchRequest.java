@@ -6,17 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import rmartin.lti.api.exception.InvalidParameterException;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 public class LTILaunchRequest {
 
     @Id
     @GeneratedValue
-    //@Column(columnDefinition = "UUID")
     private long id;
 
     public String getPublicId() {
@@ -31,13 +27,13 @@ public class LTILaunchRequest {
 
     @JsonIgnore
     @ManyToOne
-    private LaunchContext myContext;
+    private LTIContext myContext;
 
-    public LaunchContext getMyContext() {
+    public LTIContext getMyContext() {
         return myContext;
     }
 
-    public void setMyContext(LaunchContext myContext) {
+    public void setMyContext(LTIContext myContext) {
         this.myContext = myContext;
     }
 
@@ -547,6 +543,73 @@ public class LTILaunchRequest {
         if(s.toLowerCase().contains("://localhost")){
             throw new InvalidParameterException("Field " + name + " contains /localhost/. Access the LMS using a FQDN or an IP instead of 'localhost', or cute kittens will die.");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LTILaunchRequest that = (LTILaunchRequest) o;
+        return id == that.id &&
+                Float.compare(that.oauthVersion, oauthVersion) == 0 &&
+                oauthTimestamp == that.oauthTimestamp &&
+                instructor == that.instructor &&
+                publicId.equals(that.publicId) &&
+                myContext.equals(that.myContext) &&
+                ltiVersion.equals(that.ltiVersion) &&
+                ltiMessageType.equals(that.ltiMessageType) &&
+                oauthNonce.equals(that.oauthNonce) &&
+                oauthCallback.equals(that.oauthCallback) &&
+                oauthSignatureMethod.equals(that.oauthSignatureMethod) &&
+                oauthSignature.equals(that.oauthSignature) &&
+                oauthConsumerKey.equals(that.oauthConsumerKey) &&
+                userId.equals(that.userId) &&
+                lisPersonSourceId.equals(that.lisPersonSourceId) &&
+                roles.equals(that.roles) &&
+                contextId.equals(that.contextId) &&
+                context_label.equals(that.context_label) &&
+                context_title.equals(that.context_title) &&
+                activityName.equals(that.activityName) &&
+                activityDescription.equals(that.activityDescription) &&
+                activityId.equals(that.activityId) &&
+                contextType.equals(that.contextType) &&
+                courseSectionSourceId.equals(that.courseSectionSourceId) &&
+                resultSourceId.equals(that.resultSourceId) &&
+                outcomeURL.equals(that.outcomeURL) &&
+                personName.equals(that.personName) &&
+                personSurname.equals(that.personSurname) &&
+                personFullName.equals(that.personFullName) &&
+                personUsername.equals(that.personUsername) &&
+                personEmail.equals(that.personEmail) &&
+                lang.equals(that.lang) &&
+                lmsName.equals(that.lmsName) &&
+                lmsFamilyName.equals(that.lmsFamilyName) &&
+                lmsVersion.equals(that.lmsVersion) &&
+                lmsInstanceGuid.equals(that.lmsInstanceGuid) &&
+                lmsInstanceName.equals(that.lmsInstanceName) &&
+                lmsInstanceDescription.equals(that.lmsInstanceDescription) &&
+                launchPresentationTarget.equals(that.launchPresentationTarget) &&
+                returnUrl.equals(that.returnUrl) &&
+                customParams.equals(that.customParams);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, publicId, myContext,
+                ltiVersion, ltiMessageType, oauthVersion,
+                oauthNonce, oauthTimestamp, oauthCallback,
+                oauthSignatureMethod, oauthSignature,
+                oauthConsumerKey, userId, lisPersonSourceId,
+                roles, contextId, context_label, context_title,
+                activityName, activityDescription, activityId,
+                contextType, courseSectionSourceId, resultSourceId,
+                outcomeURL, personName, personSurname, personFullName,
+                personUsername, personEmail, lang, lmsName,
+                lmsFamilyName, lmsVersion, lmsInstanceGuid,
+                lmsInstanceName, lmsInstanceDescription,
+                launchPresentationTarget, returnUrl,
+                instructor, customParams
+        );
     }
 }
 

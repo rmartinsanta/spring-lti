@@ -1,12 +1,12 @@
 package rmartin.lti.server.service.repos;
 
-import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.model.LTIContext;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ContextRepository extends JpaRepository<LaunchContext, Long> {
+public interface ContextRepository extends JpaRepository<LTIContext, Long> {
 
-    LaunchContext findByClientAndUserIdAndRolesAndResourceId(String oauthConsumerKey, String userId, String roles, String activityId);
+    LTIContext findByClientAndUserIdAndRolesAndResourceId(String oauthConsumerKey, String userId, String roles, String activityId);
 
 }
