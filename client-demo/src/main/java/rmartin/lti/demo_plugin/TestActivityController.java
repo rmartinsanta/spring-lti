@@ -1,25 +1,17 @@
 package rmartin.lti.demo_plugin;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import rmartin.lti.server.model.Activity;
-import rmartin.lti.server.model.ActivityConfig;
-import rmartin.lti.server.model.LaunchContext;
-import rmartin.lti.server.service.AsyncMessageSender;
-import rmartin.lti.server.service.ConfigService;
-import rmartin.lti.server.service.ContextService;
-import rmartin.lti.server.service.Redis;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import rmartin.lti.server.model.Activity;
+import rmartin.lti.server.model.ActivityConfig;
+import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.service.ConfigService;
+import rmartin.lti.server.service.ContextService;
+import rmartin.lti.server.service.IOUtils;
 
 import static rmartin.lti.demo_plugin.TestActivityController.ACTIVITY_ID;
 
@@ -27,20 +19,14 @@ import static rmartin.lti.demo_plugin.TestActivityController.ACTIVITY_ID;
 @RequestMapping("/"+ACTIVITY_ID)
 public class TestActivityController extends Activity {
 
+    public static final String ACTIVITY_ID = "test";
     private static final Logger log  = Logger.getLogger(TestActivityController.class);
 
-    @Value("${server.context.debug}")
-    private boolean debugEnabled;
-
-    static final String ACTIVITY_ID = "test";
-
     private final ContextService contextService;
-
     private final ConfigService configService;
 
     @Autowired
-    public TestActivityController(Redis redis, AsyncMessageSender messageSender, ContextService contextService, ConfigService configService) {
-        super(redis, messageSender);
+    public TestActivityController(ContextService contextService, ConfigService configService) {
         this.contextService = contextService;
         this.configService = configService;
     }
@@ -62,8 +48,8 @@ public class TestActivityController extends Activity {
 
         modelView.addObject("c", context);
 
-        if(debugEnabled){
-            modelView.addObject("debug", dtoToArray(context));
+        if(isDebugEnabled()){
+            modelView.addObject("debug", IOUtils.object2Map(context));
             modelView.addObject("isdebug", true);
 
             modelView.addObject("requests", context.getLaunchRequests());
@@ -108,18 +94,6 @@ public class TestActivityController extends Activity {
         config.setValue(DemoConfig.CAN_RETRY, allowRetry);
         configService.save(config);
         return ResponseEntity.ok().build();
-    }
-
-    private Map.Entry<String, Object>[] dtoToArray(Object any){
-        // DTO to pairs of property name - property value
-        Map.Entry<String, Object>[] data = (Map.Entry<String, Object>[]) new ObjectMapper().convertValue(any, HashMap.class)
-                .entrySet()
-                .stream()
-                .filter(e -> !((Map.Entry) e).getKey().equals("launchRequests"))
-                .toArray(Map.Entry[]::new);
-        // Sort alphabetically
-        Arrays.sort(data, Map.Entry.comparingByKey());
-        return data;
     }
 }
 

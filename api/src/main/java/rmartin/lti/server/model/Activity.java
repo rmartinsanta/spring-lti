@@ -1,6 +1,8 @@
 package rmartin.lti.server.model;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import rmartin.lti.api.exception.GradeException;
 import rmartin.lti.server.model.enums.ContextStatus;
 import rmartin.lti.server.service.AsyncMessageSender;
@@ -8,13 +10,14 @@ import rmartin.lti.server.service.Redis;
 
 public abstract class Activity {
 
-    private final Redis puller;
-    private final AsyncMessageSender messageSender;
+    @Autowired
+    private Redis puller;
 
-    public Activity(Redis puller, AsyncMessageSender messageSender) {
-        this.puller = puller;
-        this.messageSender = messageSender;
-    }
+    @Autowired
+    private AsyncMessageSender messageSender;
+
+    @Value("${server.context.debug}")
+    private boolean debugEnabled;
 
     /**
      * Get a unique string representing this activity name
@@ -47,5 +50,9 @@ public abstract class Activity {
      */
     protected boolean cannotRetry(LaunchContext context) {
         return context.getStatus() == ContextStatus.SCORE_SUBMITTED && !context.getConfig().getBool(BaseConfig.CAN_RETRY);
+    }
+
+    public boolean isDebugEnabled() {
+        return debugEnabled;
     }
 }
