@@ -89,7 +89,6 @@ public class TestActivityController extends Activity {
 
     @PostMapping("/allowRetry")
     public ResponseEntity setAllowRetry(boolean allowRetry, String secretKey){
-
         log.info("Change in TestActivity Config -- Set AllowRetry to "+allowRetry);
         ActivityConfig config = contextService.get(secretKey).getConfig();
         config.setValue(ConfigKeys.CAN_RETRY, allowRetry);
