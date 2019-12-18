@@ -92,6 +92,7 @@ public class LTIController {
         // Parse the request to a POJO
         LTILaunchRequest launchRequest = new ObjectMapper().convertValue(toPojo, LTILaunchRequest.class);
         launchRequest.setCustomParams(customParams);
+        launchRequest.validate();
 
         // Check that the activity exists, and has permission to launch it
         if(!this.activityProvider.exists(activityId))

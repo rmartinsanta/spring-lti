@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *  - TODO complete this list
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class InvalidCredentialsException extends RuntimeException{
+public class InvalidCredentialsException extends RuntimeException {
     public InvalidCredentialsException(Throwable cause) {
         super(cause);
     }

@@ -3,6 +3,7 @@ package rmartin.lti.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import rmartin.lti.api.exception.InvalidParameterException;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -535,6 +536,17 @@ public class LTILaunchRequest {
 
     public void setCustomParams(Map<String, String> customParams) {
         this.customParams = customParams;
+    }
+
+    public void validate() throws RuntimeException {
+        checkHost(this.outcomeURL, "outcomeURL");
+        checkHost(this.returnUrl, "returnURL");
+    }
+
+    private void checkHost(String s, String name){
+        if(s.toLowerCase().contains("://localhost")){
+            throw new InvalidParameterException("Field " + name + " contains /localhost/. Access the LMS using a FQDN or an IP instead of 'localhost', or cute kittens will die.");
+        }
     }
 }
 
