@@ -40,20 +40,22 @@ public class LTIController {
 
     private final Redis redis;
 
+    private final ObjectMapper mapper;
+
     @Autowired
-    public LTIController(KeyServiceImpl keyService, GradeServiceImpl gradeService, ContextServiceImpl launchService, ActivityProvider activityProvider, Redis redis) {
+    public LTIController(KeyServiceImpl keyService, GradeServiceImpl gradeService, ContextServiceImpl launchService, ActivityProvider activityProvider, Redis redis, ObjectMapper mapper) {
         this.keyService = keyService;
         this.gradeService = gradeService;
         this.contextService = launchService;
         this.activityProvider = activityProvider;
         this.redis = redis;
+        this.mapper = mapper;
     }
 
     @PostMapping(value = "/test", consumes = {"application/x-www-form-urlencoded"})
     public String handleTestRequest(@RequestParam Map<String, String> launchParams, Model model, HttpServletRequest request) {
 
-        // TODO Declare an ObjectMapper as a Bean and use Dependency Inyection
-        LTILaunchRequest launchRequest = new ObjectMapper().convertValue(launchParams, LTILaunchRequest.class);
+        LTILaunchRequest launchRequest = mapper.convertValue(launchParams, LTILaunchRequest.class);
 
         String secret = keyService.getSecretForKey(request.getParameter("oauth_consumer_key"));
 
@@ -89,8 +91,7 @@ public class LTIController {
             }
         });
 
-        // Parse the request to a POJO
-        LTILaunchRequest launchRequest = new ObjectMapper().convertValue(toPojo, LTILaunchRequest.class);
+        LTILaunchRequest launchRequest = mapper.convertValue(toPojo, LTILaunchRequest.class);
         launchRequest.setCustomParams(customParams);
         launchRequest.validate();
 

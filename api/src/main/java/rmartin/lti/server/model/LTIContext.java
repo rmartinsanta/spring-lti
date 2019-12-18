@@ -14,7 +14,6 @@ public class LTIContext {
 
     @Id
     @GeneratedValue
-    //@Column(columnDefinition = "UUID")
     private long id;
 
     @Transient

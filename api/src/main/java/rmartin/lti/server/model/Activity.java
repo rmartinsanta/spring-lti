@@ -4,6 +4,7 @@ package rmartin.lti.server.model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import rmartin.lti.api.exception.GradeException;
+import rmartin.lti.server.model.enums.ConfigKeys;
 import rmartin.lti.server.model.enums.ContextStatus;
 import rmartin.lti.server.service.AsyncMessageSender;
 import rmartin.lti.server.service.Redis;
@@ -26,9 +27,8 @@ public abstract class Activity {
     public abstract String getactivityId();
 
     // TODO review & refactor this, use service?
-    protected LTIContext getLaunchContext(String id) {
-        LTIContext context = puller.getDataLaunch(id);
-        return context;
+    protected LTIContext getContext(String id) {
+        return puller.getLTIContext(id);
     }
 
     protected void grade(LTIContext context, float score){
@@ -49,7 +49,7 @@ public abstract class Activity {
      * @return false if the user can retry, true if the user can not retry
      */
     protected boolean cannotRetry(LTIContext context) {
-        return context.getStatus() == ContextStatus.SCORE_SUBMITTED && !context.getConfig().getBool(BaseConfig.CAN_RETRY);
+        return context.getStatus() == ContextStatus.SCORE_SUBMITTED && !context.getConfig().getBool(ConfigKeys.CAN_RETRY);
     }
 
     public boolean isDebugEnabled() {

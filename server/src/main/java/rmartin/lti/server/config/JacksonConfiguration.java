@@ -14,14 +14,19 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 public class JacksonConfiguration {
 
     @Bean
-    public Jackson2JsonRedisSerializer launchRequestSerializer() {
+    public Jackson2JsonRedisSerializer<LTIContext> launchRequestSerializer() {
+        Jackson2JsonRedisSerializer<LTIContext> serializer = new Jackson2JsonRedisSerializer<>(LTIContext.class);
+        serializer.setObjectMapper(getObjectMapper());
+        return serializer;
+    }
+
+    @Bean
+    public ObjectMapper getObjectMapper(){
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
         mapper.registerModule(new ParameterNamesModule());
         mapper.registerModule(new JavaTimeModule());
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        Jackson2JsonRedisSerializer<LTIContext> serializer = new Jackson2JsonRedisSerializer<>(LTIContext.class);
-        serializer.setObjectMapper(mapper);
-        return serializer;
+        return mapper;
     }
 }

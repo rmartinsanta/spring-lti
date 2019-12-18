@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import rmartin.lti.server.model.Activity;
 import rmartin.lti.server.model.ActivityConfig;
 import rmartin.lti.server.model.LTIContext;
+import rmartin.lti.server.model.enums.ConfigKeys;
 import rmartin.lti.server.service.ConfigService;
 import rmartin.lti.server.service.ContextService;
 import rmartin.lti.server.service.IOUtils;
@@ -39,11 +40,11 @@ public class TestActivityController extends Activity {
     @GetMapping("/{id}")
     public ModelAndView handleActivityLaunch(ModelAndView modelView, @PathVariable String id){
 
-        LTIContext context = this.getLaunchContext(id);
+        LTIContext context = this.getContext(id);
         modelView.setViewName("TestActivity/index");
 
         modelView.addObject("canSubmit", !cannotRetry(context));
-        modelView.addObject("canSubmit", context.getConfig().getBool(DemoConfig.CAN_RETRY));
+        modelView.addObject("canSubmit", context.getConfig().getBool(ConfigKeys.CAN_RETRY));
         modelView.addObject("postUrl", "/"+ACTIVITY_ID+"/end");
 
         modelView.addObject("c", context);
@@ -91,7 +92,7 @@ public class TestActivityController extends Activity {
 
         log.info("Change in TestActivity Config -- Set AllowRetry to "+allowRetry);
         ActivityConfig config = contextService.get(secretKey).getConfig();
-        config.setValue(DemoConfig.CAN_RETRY, allowRetry);
+        config.setValue(ConfigKeys.CAN_RETRY, allowRetry);
         configService.save(config);
         return ResponseEntity.ok().build();
     }

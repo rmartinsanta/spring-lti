@@ -58,7 +58,7 @@ public class RequestValidatorImplementation implements RequestValidator {
     @Override
     public void validateRequest(HttpServletRequest request){
 
-        // 1. Custom verifications, TODO improve verifications?
+        // 1. Custom verifications
         String consumerKey = request.getParameter("oauth_consumer_key");
         if(consumerKey == null || consumerKey.isEmpty()) {
             throw new InvalidCredentialsException("The request must include the parameter oauth_consumer_key");

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.codehaus.jackson.map.ObjectMapper;
+import rmartin.lti.server.model.enums.ConfigKeys;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -26,39 +27,38 @@ public final class ActivityConfig {
     private Map<String, Object> config = new HashMap<>();
 
     @JsonProperty
-    private String resourceId;
+    private String activityId;
 
     @JsonProperty
     private String clientId;
 
     protected ActivityConfig() {}
 
-    public ActivityConfig(String clientId, String resourceId) {
-        this.resourceId = resourceId;
+    public ActivityConfig(String clientId, String activityId) {
+        this.activityId = activityId;
         this.clientId = clientId;
-        config.put(BaseConfig.CAN_RETRY, true);
-
+        config.put(ConfigKeys.CAN_RETRY.toString(), true);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getValue(String key){
-        return (T) config.get(key);
+    public <T, E extends Enum<E>> T getValue(E key){
+        return (T) config.get(key.toString());
     }
 
-    public boolean getBool(String key){
+    public <E extends Enum<E>> boolean getBool(E key){
         return getValue(key);
     }
 
-    public int getInt(String key) {
+    public <E extends Enum<E>> int getInt(E key) {
         return getValue(key);
     }
 
-    public String getString(String key) {
+    public <E extends Enum<E>> String getString(E key) {
         return getValue(key);
     }
 
-    public void setValue(String key, Object value){
-        config.put(key, value);
+    public <E extends Enum<E>> void setValue(E key, Object value){
+        config.put(key.toString(), value);
     }
 
     @JsonIgnore
@@ -69,7 +69,6 @@ public final class ActivityConfig {
     @Access(AccessType.PROPERTY)
     @JsonProperty
     public String getSerialized(){
-        // TODO Declare an ObjectMapper as a Bean and use Dependency Inyection
         ObjectMapper om = new ObjectMapper();
         try {
             return om.writer().writeValueAsString(this.config);
@@ -79,7 +78,6 @@ public final class ActivityConfig {
     }
 
     public void setSerialized(String serialized){
-        // TODO Declare an ObjectMapper as a Bean and use Dependency Inyection
         ObjectMapper om = new ObjectMapper();
         TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {};
         try {

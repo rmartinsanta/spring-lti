@@ -57,7 +57,7 @@ public class RedisLaunchContextImpl implements Redis {
     }
 
     @Override
-    public LTIContext getDataLaunch(String id){
+    public LTIContext getLTIContext(String id){
         LTIContext context = launches.get(id);
 
         if(context == null){
