@@ -1,7 +1,9 @@
 package rmartin.lti.server.service;
 
-public interface RequestValidator {
-    void validateRequest();
+import javax.servlet.http.HttpServletRequest;
 
-    boolean isValidRequest();
+public interface RequestValidator {
+    void validateRequest(HttpServletRequest request);
+
+    boolean isValidRequest(HttpServletRequest request);
 }

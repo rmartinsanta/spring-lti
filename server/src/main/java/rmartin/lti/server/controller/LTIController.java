@@ -1,16 +1,6 @@
 package rmartin.lti.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import rmartin.lti.api.exception.ActivityInsufficientPermissionException;
-import rmartin.lti.api.exception.ActivityNotFoundException;
-import rmartin.lti.api.exception.InvalidCredentialsException;
-import rmartin.lti.server.model.LTILaunchRequest;
-import rmartin.lti.server.model.LaunchContext;
-import rmartin.lti.server.security.VerifySignature;
-import rmartin.lti.server.service.*;
-import rmartin.lti.server.service.impls.GradeServiceImpl;
-import rmartin.lti.server.service.impls.KeyServiceImpl;
-import rmartin.lti.server.service.impls.ContextServiceImpl;
 import org.imsglobal.lti.launch.LtiOauthVerifier;
 import org.imsglobal.lti.launch.LtiVerificationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +10,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import rmartin.lti.api.exception.ActivityInsufficientPermissionException;
+import rmartin.lti.api.exception.ActivityNotFoundException;
+import rmartin.lti.api.exception.InvalidCredentialsException;
+import rmartin.lti.server.model.LTILaunchRequest;
+import rmartin.lti.server.model.LaunchContext;
+import rmartin.lti.server.security.LTISigned;
+import rmartin.lti.server.service.*;
+import rmartin.lti.server.service.impls.ContextServiceImpl;
+import rmartin.lti.server.service.impls.GradeServiceImpl;
+import rmartin.lti.server.service.impls.KeyServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/lti")
@@ -70,24 +71,27 @@ public class LTIController {
     }
 
     @PostMapping(value = "/launch/{activityId}", consumes = {"application/x-www-form-urlencoded"})
-    @VerifySignature
-    public String launchApp(@RequestParam Map<String, String> launchParams, @PathVariable String activityId) {
+    @LTISigned
+    public String launchApp(HttpServletRequest request, @PathVariable String activityId) {
+        Map<String, String[]> launchParams = request.getParameterMap();
 
-        Map<String, String> toPojo = launchParams
-                .entrySet()
-                .stream()
-                // Remove custom parameters, will be used separately
-                .filter(e -> !e.getKey().startsWith("custom"))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<String, String> toPojo = new HashMap<>();
+        Map<String, String> customParams = new HashMap<>();
+
+        launchParams.forEach((k, v) -> {
+            if(v.length != 1) {
+                throw new UnsupportedOperationException(String.format("Key %s has multiple values %s", k, Arrays.toString(v)));
+            }
+            if(k.startsWith("custom")){
+                customParams.put(k, v[0]);
+            } else {
+                toPojo.put(k, v[0]);
+            }
+        });
 
         // Parse the request to a POJO
         LTILaunchRequest launchRequest = new ObjectMapper().convertValue(toPojo, LTILaunchRequest.class);
-
-        launchRequest.setCustomParams(launchParams.entrySet()
-                .stream()
-                .filter(e -> e.getKey().startsWith("custom"))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-        );
+        launchRequest.setCustomParams(customParams);
 
         // Check that the activity exists, and has permission to launch it
         if(!this.activityProvider.exists(activityId))

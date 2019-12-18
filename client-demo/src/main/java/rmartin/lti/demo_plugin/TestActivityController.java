@@ -118,7 +118,7 @@ public class TestActivityController extends Activity {
                 .filter(e -> !((Map.Entry) e).getKey().equals("launchRequests"))
                 .toArray(Map.Entry[]::new);
         // Sort alphabetically
-        Arrays.sort(data, Comparator.comparing(Map.Entry::getKey));
+        Arrays.sort(data, Map.Entry.comparingByKey());
         return data;
     }
 }

@@ -2,29 +2,24 @@ package rmartin.lti.server.service.impls;
 
 import net.oauth.*;
 import net.oauth.server.OAuthServlet;
-import org.imsglobal.lti.launch.*;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 import rmartin.lti.api.exception.InvalidCredentialsException;
 import rmartin.lti.api.exception.InvalidSignatureException;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.jboss.logging.Logger;
 import rmartin.lti.server.service.KeyService;
 import rmartin.lti.server.service.RequestValidator;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Validate incoming LTI requests oauth signatures
  * Based on: https://raw.githubusercontent.com/IMSGlobal/basiclti-util-java/master/src/main/java/org/imsglobal/lti/launch/LtiOauthVerifier.java
  */
-@Service
+@Controller
 public class RequestValidatorImplementation implements RequestValidator {
 
-    private final static Logger log = Logger.getLogger(LtiOauthVerifier.class.getName());
-
-    @Autowired
-    private HttpServletRequest request;
+    private final static Logger log = Logger.getLogger(RequestValidatorImplementation.class.getName());
 
     @Autowired
     private KeyService keyService;
@@ -61,7 +56,7 @@ public class RequestValidatorImplementation implements RequestValidator {
      * @throws InvalidSignatureException If the signature is not valid for this client consumer key.
      */
     @Override
-    public void validateRequest(){
+    public void validateRequest(HttpServletRequest request){
 
         // 1. Custom verifications, TODO improve verifications?
         String consumerKey = request.getParameter("oauth_consumer_key");
@@ -76,9 +71,9 @@ public class RequestValidatorImplementation implements RequestValidator {
     }
 
     @Override
-    public boolean isValidRequest(){
+    public boolean isValidRequest(HttpServletRequest request){
         try {
-            validateRequest();
+            validateRequest(request);
         } catch (Exception e) {
             log.info("Invalid request: " +e.getCause());
             log.debug(e.toString());

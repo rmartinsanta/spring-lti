@@ -29,7 +29,7 @@ public class SecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .anyRequest().permitAll();
-        http.httpBasic();
+        //http.httpBasic(); // Disabled until Authentication via LTI signature validation is fixed
         http.csrf().disable();
         http.headers().frameOptions().disable();
     }
