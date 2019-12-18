@@ -30,16 +30,19 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-  spring-repository:
+  lti:
     # Core app, depends on the rest of components. Exposes API on port 8080.
     depends_on:
       - mysql
       - redis
       - rabbitmq
-    image: extremoblando/videoquizz:latest
-    container_name: springbackend
+    build: ../../
+    container_name: lti
+    tty: true
+    stdin_open: true
     ports:
       - 8080:8080
+      - 5005:5005
     links:
       - mysql
       - redis
@@ -51,6 +54,7 @@ services:
       - SPRING_REDIS_HOST=redis
       - MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS=always
       - LOADER_PATH=/plugins
+      - LOGGING_LEVEL_ROOT=DEBUG
     volumes:
       - ./plugins:/plugins
 

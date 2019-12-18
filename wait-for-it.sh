@@ -174,7 +174,7 @@ if [[ $CLI != "" ]]; then
     #jar xf /app.jar BOOT-INF/lib
     #cp /plugins/* BOOT-INF/lib/
     #jar fu0 /app.jar BOOT-INF/lib
-    java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+    java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Djava.security.egd=file:/dev/./urandom -jar /app.jar
     #java -verbose:class -Djava.security.egd=file:/dev/./urandom -jar /app.jar
 else
     exit $RESULT
