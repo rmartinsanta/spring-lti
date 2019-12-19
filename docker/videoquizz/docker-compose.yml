@@ -35,7 +35,9 @@ services:
       - mysql
       - redis
       - rabbitmq
-    build: ../../
+    build:
+      dockerfile: Dockerfile
+      context: ../../
     container_name: lti
     tty: true
     stdin_open: true
