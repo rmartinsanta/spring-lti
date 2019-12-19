@@ -1,7 +1,7 @@
 package rmartin.lti.server.controller;
 
 import rmartin.lti.api.exception.*;
-import rmartin.lti.server.model.LTIErrorResponse;
+import rmartin.lti.api.model.LTIErrorResponse;
 import org.jboss.logging.Logger;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

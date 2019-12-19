@@ -1,6 +1,6 @@
-package rmartin.lti.server.service;
+package rmartin.lti.api.service;
 
-import rmartin.lti.server.model.LTIContext;
+import rmartin.lti.api.model.LTIContext;
 
 public interface Redis {
     LTIContext getLTIContext(String id);

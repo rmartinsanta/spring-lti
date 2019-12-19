@@ -1,4 +1,4 @@
-package rmartin.lti.server.model;
+package rmartin.lti.api.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

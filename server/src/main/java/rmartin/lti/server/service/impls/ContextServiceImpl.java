@@ -1,12 +1,12 @@
 package rmartin.lti.server.service.impls;
 
-import rmartin.lti.server.service.Redis;
+import rmartin.lti.api.service.Redis;
 import rmartin.lti.server.service.repos.ContextRepository;
-import rmartin.lti.server.model.LTILaunchRequest;
-import rmartin.lti.server.model.LTIContext;
-import rmartin.lti.server.service.ConfigService;
-import rmartin.lti.server.service.ContextService;
-import rmartin.lti.server.service.SecretService;
+import rmartin.lti.api.model.LTILaunchRequest;
+import rmartin.lti.api.model.LTIContext;
+import rmartin.lti.api.service.ConfigService;
+import rmartin.lti.api.service.ContextService;
+import rmartin.lti.api.service.SecretService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

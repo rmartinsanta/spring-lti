@@ -1,6 +1,6 @@
-package rmartin.lti.server.service;
+package rmartin.lti.api.service;
 
-import rmartin.lti.server.model.MessageDTO;
+import rmartin.lti.api.model.MessageDTO;
 
 /**
  * Send a message asynchronously

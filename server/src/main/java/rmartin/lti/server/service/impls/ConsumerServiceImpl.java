@@ -2,9 +2,9 @@ package rmartin.lti.server.service.impls;
 
 import org.jboss.logging.Logger;
 import rmartin.lti.api.exception.ConsumerNotFound;
-import rmartin.lti.server.service.SecretService;
+import rmartin.lti.api.service.SecretService;
 import rmartin.lti.server.service.repos.ConsumerRepository;
-import rmartin.lti.server.model.Consumer;
+import rmartin.lti.api.model.Consumer;
 import rmartin.lti.server.service.ConsumerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

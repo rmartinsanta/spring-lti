@@ -1,4 +1,4 @@
-package rmartin.lti.server.model;
+package rmartin.lti.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

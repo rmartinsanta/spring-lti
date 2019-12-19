@@ -1,4 +1,4 @@
-package rmartin.lti.server.model;
+package rmartin.lti.api.model;
 
 import rmartin.lti.api.exception.InvalidCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

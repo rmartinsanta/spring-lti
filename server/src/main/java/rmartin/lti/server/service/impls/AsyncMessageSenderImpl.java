@@ -1,7 +1,7 @@
 package rmartin.lti.server.service.impls;
 
-import rmartin.lti.server.service.AsyncMessageSender;
-import rmartin.lti.server.model.MessageDTO;
+import rmartin.lti.api.service.AsyncMessageSender;
+import rmartin.lti.api.model.MessageDTO;
 import org.jboss.logging.Logger;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;

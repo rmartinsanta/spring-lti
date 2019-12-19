@@ -1,7 +1,7 @@
 package rmartin.lti.server.service.impls;
 
-import rmartin.lti.server.model.LTIContext;
-import rmartin.lti.server.service.Redis;
+import rmartin.lti.api.model.LTIContext;
+import rmartin.lti.api.service.Redis;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

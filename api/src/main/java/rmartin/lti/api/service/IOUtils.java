@@ -1,4 +1,4 @@
-package rmartin.lti.server.service;
+package rmartin.lti.api.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

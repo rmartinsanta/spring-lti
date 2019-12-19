@@ -1,11 +1,11 @@
-package rmartin.lti.server.model;
+package rmartin.lti.api.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.codehaus.jackson.map.ObjectMapper;
-import rmartin.lti.server.model.enums.ConfigKeys;
+import rmartin.lti.api.model.enums.ConfigKeys;
 
 import javax.persistence.*;
 import java.io.IOException;

@@ -1,6 +1,6 @@
 package rmartin.lti.server.security;
 
-import rmartin.lti.server.model.Consumer;
+import rmartin.lti.api.model.Consumer;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;

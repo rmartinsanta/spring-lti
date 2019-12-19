@@ -1,6 +1,6 @@
 package rmartin.lti.server.controller.dto;
 
-import rmartin.lti.server.model.Consumer;
+import rmartin.lti.api.model.Consumer;
 
 public class ConsumerResponseDTO {
     private long id;

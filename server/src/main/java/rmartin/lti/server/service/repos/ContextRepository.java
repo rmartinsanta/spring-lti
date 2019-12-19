@@ -1,6 +1,6 @@
 package rmartin.lti.server.service.repos;
 
-import rmartin.lti.server.model.LTIContext;
+import rmartin.lti.api.model.LTIContext;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

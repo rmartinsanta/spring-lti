@@ -1,4 +1,4 @@
-package rmartin.lti.server.model.enums;
+package rmartin.lti.api.model.enums;
 
 public enum  ConfigKeys {
     CAN_RETRY

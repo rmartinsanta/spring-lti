@@ -1,7 +1,7 @@
-package rmartin.lti.server.service;
+package rmartin.lti.api.service;
 
-import rmartin.lti.server.model.ActivityConfig;
-import rmartin.lti.server.model.LTILaunchRequest;
+import rmartin.lti.api.model.ActivityConfig;
+import rmartin.lti.api.model.LTILaunchRequest;
 
 /**
  * Provides functionality related with the configuration of the available activities

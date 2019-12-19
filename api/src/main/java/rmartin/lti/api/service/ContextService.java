@@ -1,7 +1,7 @@
-package rmartin.lti.server.service;
+package rmartin.lti.api.service;
 
-import rmartin.lti.server.model.LTILaunchRequest;
-import rmartin.lti.server.model.LTIContext;
+import rmartin.lti.api.model.LTILaunchRequest;
+import rmartin.lti.api.model.LTIContext;
 
 /**
  * Operations related to the current LTIContext

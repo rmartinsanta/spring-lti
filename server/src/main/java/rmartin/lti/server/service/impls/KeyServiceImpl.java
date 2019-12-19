@@ -5,7 +5,7 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rmartin.lti.api.exception.InvalidCredentialsException;
-import rmartin.lti.server.model.Consumer;
+import rmartin.lti.api.model.Consumer;
 import rmartin.lti.server.service.KeyService;
 import rmartin.lti.server.service.repos.ConsumerRepository;
 

@@ -9,7 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-import rmartin.lti.server.model.Consumer;
+import rmartin.lti.api.model.Consumer;
 import rmartin.lti.server.service.ConsumerService;
 
 import java.util.ArrayList;

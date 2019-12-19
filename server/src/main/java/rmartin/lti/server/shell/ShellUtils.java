@@ -3,7 +3,7 @@ package rmartin.lti.server.shell;
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStyle;
 import org.springframework.shell.table.*;
-import rmartin.lti.server.model.Consumer;
+import rmartin.lti.api.model.Consumer;
 
 import java.util.LinkedHashMap;
 

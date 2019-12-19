@@ -1,13 +1,13 @@
-package rmartin.lti.server.model;
+package rmartin.lti.api.model;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import rmartin.lti.api.exception.GradeException;
-import rmartin.lti.server.model.enums.ConfigKeys;
-import rmartin.lti.server.model.enums.ContextStatus;
-import rmartin.lti.server.service.AsyncMessageSender;
-import rmartin.lti.server.service.Redis;
+import rmartin.lti.api.model.enums.ConfigKeys;
+import rmartin.lti.api.model.enums.ContextStatus;
+import rmartin.lti.api.service.AsyncMessageSender;
+import rmartin.lti.api.service.Redis;
 
 public abstract class Activity {
 

@@ -2,8 +2,8 @@ package rmartin.lti.server.controller;
 
 import rmartin.lti.server.controller.dto.ConsumerRequestDTO;
 import rmartin.lti.server.controller.dto.ConsumerResponseDTO;
-import rmartin.lti.server.model.Consumer;
-import rmartin.lti.server.service.SecretService;
+import rmartin.lti.api.model.Consumer;
+import rmartin.lti.api.service.SecretService;
 import rmartin.lti.server.service.repos.ConsumerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

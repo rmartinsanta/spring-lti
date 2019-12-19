@@ -1,7 +1,7 @@
 package rmartin.lti.server.service.impls;
 
 import rmartin.lti.server.service.ActivityProvider;
-import rmartin.lti.server.model.Activity;
+import rmartin.lti.api.model.Activity;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

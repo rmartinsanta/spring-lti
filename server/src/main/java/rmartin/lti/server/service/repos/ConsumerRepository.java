@@ -1,6 +1,6 @@
 package rmartin.lti.server.service.repos;
 
-import rmartin.lti.server.model.Consumer;
+import rmartin.lti.api.model.Consumer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package rmartin.lti.server.service;
 
-import rmartin.lti.server.model.Activity;
+import rmartin.lti.api.model.Activity;
 
 /**
  * TODO if this interface is internal remove from API package

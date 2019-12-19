@@ -1,7 +1,7 @@
 package rmartin.lti.server.service.impls;
 
-import rmartin.lti.server.model.MessageDTO;
-import rmartin.lti.server.service.AsyncMessageListener;
+import rmartin.lti.api.model.MessageDTO;
+import rmartin.lti.api.service.AsyncMessageListener;
 import rmartin.lti.server.service.GradeService;
 import org.jboss.logging.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

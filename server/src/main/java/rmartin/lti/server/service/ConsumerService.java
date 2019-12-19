@@ -1,6 +1,6 @@
 package rmartin.lti.server.service;
 
-import rmartin.lti.server.model.Consumer;
+import rmartin.lti.api.model.Consumer;
 
 import java.util.List;
 import java.util.Optional;

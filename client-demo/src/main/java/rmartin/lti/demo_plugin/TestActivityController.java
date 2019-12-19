@@ -6,13 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import rmartin.lti.server.model.Activity;
-import rmartin.lti.server.model.ActivityConfig;
-import rmartin.lti.server.model.LTIContext;
-import rmartin.lti.server.model.enums.ConfigKeys;
-import rmartin.lti.server.service.ConfigService;
-import rmartin.lti.server.service.ContextService;
-import rmartin.lti.server.service.IOUtils;
+import rmartin.lti.api.model.Activity;
+import rmartin.lti.api.model.ActivityConfig;
+import rmartin.lti.api.model.LTIContext;
+import rmartin.lti.api.model.enums.ConfigKeys;
+import rmartin.lti.api.service.ConfigService;
+import rmartin.lti.api.service.ContextService;
+import rmartin.lti.api.service.IOUtils;
 
 import static rmartin.lti.demo_plugin.TestActivityController.ACTIVITY_ID;
 

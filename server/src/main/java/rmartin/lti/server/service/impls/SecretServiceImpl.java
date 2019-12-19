@@ -1,6 +1,6 @@
 package rmartin.lti.server.service.impls;
 
-import rmartin.lti.server.service.SecretService;
+import rmartin.lti.api.service.SecretService;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 

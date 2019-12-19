@@ -1,7 +1,7 @@
-package rmartin.lti.server.model;
+package rmartin.lti.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import rmartin.lti.server.model.enums.ContextStatus;
+import rmartin.lti.api.model.enums.ContextStatus;
 
 import javax.persistence.*;
 import java.time.Instant;
