@@ -1,5 +1,7 @@
 package rmartin.lti.server.service.impls;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.oauth.*;
 import net.oauth.server.OAuthServlet;
 import org.jboss.logging.Logger;
@@ -23,6 +25,9 @@ public class RequestValidatorImplementation implements RequestValidator {
 
     @Autowired
     private KeyService keyService;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     /**
      * This method verifies the signed HttpServletRequest
@@ -73,7 +78,10 @@ public class RequestValidatorImplementation implements RequestValidator {
     @Override
     public boolean isValidRequest(HttpServletRequest request){
         try {
+            log.info("Incoming request: \n"  + mapper.writer().writeValueAsString(request.getParameterMap()));
             validateRequest(request);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         } catch (Exception e) {
             log.info("Invalid request: " +e.getCause());
             log.debug(e.toString());
