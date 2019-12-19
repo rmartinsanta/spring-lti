@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="LTI" type="docker-deploy" factoryName="docker-compose.yml" server-name="Docker">
+    <deployment type="docker-compose.yml">
+      <settings>
+        <option name="commandLineOptions" value="--build" />
+        <option name="services">
+          <list>
+            <option value="lti" />
+            <option value="mysql" />
+            <option value="rabbitmq" />
+            <option value="redis" />
+          </list>
+        </option>
+        <option name="sourceFilePath" value="docker/videoquizz/docker-compose.yml" />
+      </settings>
+    </deployment>
+    <method v="2">
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Maven Build" run_configuration_type="MavenRunConfiguration" />
+    </method>
+  </configuration>
+</component>
