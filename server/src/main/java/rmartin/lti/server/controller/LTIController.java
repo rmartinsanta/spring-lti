@@ -17,7 +17,6 @@ import rmartin.lti.api.model.LTILaunchRequest;
 import rmartin.lti.api.model.LTIContext;
 import rmartin.lti.api.service.ContextService;
 import rmartin.lti.api.service.Redis;
-import rmartin.lti.server.security.LTISigned;
 import rmartin.lti.server.service.*;
 import rmartin.lti.server.service.impls.ContextServiceImpl;
 import rmartin.lti.server.service.impls.GradeServiceImpl;
@@ -44,14 +43,17 @@ public class LTIController {
 
     private final ObjectMapper mapper;
 
+    private final RequestValidator validator;
+
     @Autowired
-    public LTIController(KeyServiceImpl keyService, GradeServiceImpl gradeService, ContextServiceImpl launchService, ActivityProvider activityProvider, Redis redis, ObjectMapper mapper) {
+    public LTIController(KeyServiceImpl keyService, GradeServiceImpl gradeService, ContextServiceImpl launchService, ActivityProvider activityProvider, Redis redis, ObjectMapper mapper, RequestValidator validator) {
         this.keyService = keyService;
         this.gradeService = gradeService;
         this.contextService = launchService;
         this.activityProvider = activityProvider;
         this.redis = redis;
         this.mapper = mapper;
+        this.validator = validator;
     }
 
     @PostMapping(value = "/test", consumes = {"application/x-www-form-urlencoded"})
@@ -75,10 +77,12 @@ public class LTIController {
     }
 
     @PostMapping(value = "/launch/{activityId}", consumes = {"application/x-www-form-urlencoded"})
-    @LTISigned
+    //@LTISigned
     public String launchApp(HttpServletRequest request, @PathVariable String activityId) {
         Map<String, String[]> launchParams = request.getParameterMap();
-
+        if(!validator.isValidRequest(request)){
+            return "redirect:/invalid-lti";
+        }
         Map<String, String> toPojo = new HashMap<>();
         Map<String, String> customParams = new HashMap<>();
 
