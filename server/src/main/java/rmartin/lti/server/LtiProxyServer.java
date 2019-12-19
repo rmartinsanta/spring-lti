@@ -9,9 +9,9 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackages = {"rmartin.lti"})
 @EntityScan(basePackages = {"rmartin.lti"})
-public class LtiIntegrationServer {
+public class LtiProxyServer {
 	public static void main(String[] args) {
 		// Go Spring go
-		SpringApplication.run(LtiIntegrationServer.class, args);
+		SpringApplication.run(LtiProxyServer.class, args);
 	}
 }
