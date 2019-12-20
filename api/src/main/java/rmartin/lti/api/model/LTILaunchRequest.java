@@ -219,6 +219,7 @@ public class LTILaunchRequest {
                 .entrySet()
                 .stream()
                 .filter(e -> !((Map.Entry) e).getKey().equals("launchRequests"))
+                .filter(e -> ((Map.Entry) e).getValue() != null)
                 .toArray(Map.Entry[]::new);
         // Standard magic
         Arrays.sort(data, Comparator.comparing(Map.Entry::getKey));
