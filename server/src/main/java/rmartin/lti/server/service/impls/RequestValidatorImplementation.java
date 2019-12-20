@@ -6,7 +6,7 @@ import net.oauth.*;
 import net.oauth.server.OAuthServlet;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import rmartin.lti.api.exception.InvalidCredentialsException;
 import rmartin.lti.api.exception.InvalidSignatureException;
 import rmartin.lti.server.service.KeyService;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  * Validate incoming LTI requests oauth signatures
  * Based on: https://raw.githubusercontent.com/IMSGlobal/basiclti-util-java/master/src/main/java/org/imsglobal/lti/launch/LtiOauthVerifier.java
  */
-@Controller
+@Service
 public class RequestValidatorImplementation implements RequestValidator {
 
     private final static Logger log = Logger.getLogger(RequestValidatorImplementation.class.getName());

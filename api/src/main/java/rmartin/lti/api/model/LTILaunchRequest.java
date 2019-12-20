@@ -97,6 +97,9 @@ public class LTILaunchRequest {
     @JsonProperty("lis_course_section_sourcedid")
     private String courseSectionSourceId;
 
+    @JsonProperty("lis_course_offering_sourcedid")
+    private String lisCourseOfferingSourceId;
+
     @JsonProperty("lis_result_sourcedid")
     private String resultSourceId;
 
@@ -366,6 +369,14 @@ public class LTILaunchRequest {
 
     public String getCourseSectionSourceId() {
         return courseSectionSourceId;
+    }
+
+    public String getLisCourseOfferingSourceId() {
+        return lisCourseOfferingSourceId;
+    }
+
+    public void setLisCourseOfferingSourceId(String lisCourseOfferingSourceId) {
+        this.lisCourseOfferingSourceId = lisCourseOfferingSourceId;
     }
 
     public void setCourseSectionSourceId(String courseSectionSourceId) {
