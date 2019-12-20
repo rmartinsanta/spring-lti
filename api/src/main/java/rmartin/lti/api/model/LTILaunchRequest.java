@@ -14,6 +14,104 @@ public class LTILaunchRequest {
     @Id
     @GeneratedValue
     private long id;
+    private String publicId;
+    @JsonIgnore
+    @ManyToOne
+    private LTIContext myContext;
+    @JsonProperty("lti_version")
+    private String ltiVersion;
+    @JsonProperty("lti_message_type")
+    private String ltiMessageType;
+    @JsonProperty("oauth_version")
+    private float oauthVersion;
+    @JsonProperty("oauth_nonce")
+    private String oauthNonce;
+    @JsonProperty("oauth_timestamp")
+    private long oauthTimestamp;
+    @JsonProperty("oauth_callback")
+    private String oauthCallback;
+    @JsonProperty("oauth_signature_method")
+    private String oauthSignatureMethod;
+    @JsonProperty("oauth_signature")
+    private String oauthSignature;
+    @JsonProperty("oauth_consumer_key")
+    private String oauthConsumerKey;
+    @JsonProperty("user_id")
+    private String userId;
+    @JsonProperty("user_image")
+    private String userImage;
+    @JsonProperty("lis_person_sourcedid")
+    private String lisPersonSourceId;
+    @JsonProperty("roles")
+    private String roles;
+    @JsonProperty("context_id")
+    private String contextId;
+    @JsonProperty("context_label")
+    private String context_label;
+    @JsonProperty("context_title")
+    private String context_title;
+    @JsonProperty("resource_link_title")
+    private String activityName;
+    @JsonProperty("resource_link_description")
+    private String activityDescription;
+    @JsonProperty("resource_link_id")
+    private String activityId;
+    @JsonProperty("context_type")
+    private String contextType;
+    @JsonProperty("lis_course_section_sourcedid")
+    private String courseSectionSourceId;
+    @JsonProperty("lis_course_offering_sourcedid")
+    private String lisCourseOfferingSourceId;
+    @JsonProperty("lis_result_sourcedid")
+    private String resultSourceId;
+    @JsonProperty("lis_outcome_service_url")
+    private String outcomeURL;
+    @JsonProperty("lis_person_name_given")
+    private String personName;
+    @JsonProperty("lis_person_name_family")
+    private String personSurname;
+    @JsonProperty("lis_person_name_full")
+    private String personFullName;
+    @JsonProperty("ext_user_username")
+    private String personUsername;
+    @JsonProperty("lis_person_contact_email_primary")
+    private String personEmail;
+    @JsonProperty("launch_presentation_locale")
+    private String lang;
+    @JsonProperty("ext_lms")
+    private String lmsName;
+    @JsonProperty("tool_consumer_info_product_family_code")
+    private String lmsFamilyName;
+    @JsonProperty("tool_consumer_info_version")
+    private String lmsVersion;
+    @JsonProperty("tool_consumer_instance_guid")
+    private String lmsInstanceGuid;
+    @JsonProperty("tool_consumer_instance_name")
+    private String lmsInstanceName;
+    @JsonProperty("tool_consumer_instance_description")
+    private String lmsInstanceDescription;
+    @JsonProperty("tool_consumer_instance_url")
+    private String toolConsumerInstanceUrl;
+    @JsonProperty("tool_consumer_instance_contact_email")
+    private String toolConsumerInstanceContactEmail;
+    /**
+     * iframe, new window wtc
+     */
+    @JsonProperty("launch_presentation_document_target")
+    private String launchPresentationTarget;
+    @JsonProperty("launch_presentation_return_url")
+    private String returnUrl;
+    @JsonProperty("launch_presentation_css_url")
+    private String launchPresentationCssUrl;
+    @JsonProperty("instructor")
+    private boolean instructor;
+    @JsonIgnore
+    @ElementCollection
+    @Column(length = 170)
+    private Map<String, String> customParams;
+
+    protected LTILaunchRequest() {
+    }
 
     public String getPublicId() {
         return publicId;
@@ -23,12 +121,6 @@ public class LTILaunchRequest {
         this.publicId = publicId;
     }
 
-    private String publicId;
-
-    @JsonIgnore
-    @ManyToOne
-    private LTIContext myContext;
-
     public LTIContext getMyContext() {
         return myContext;
     }
@@ -37,136 +129,57 @@ public class LTILaunchRequest {
         this.myContext = myContext;
     }
 
-    @JsonProperty("lti_version")
-    private String ltiVersion;
+    public String getUserImage() {
+        return userImage;
+    }
 
-    @JsonProperty("lti_message_type")
-    private String ltiMessageType;
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
 
-    @JsonProperty("oauth_version")
-    private float oauthVersion;
+    public String getToolConsumerInstanceUrl() {
+        return toolConsumerInstanceUrl;
+    }
 
-    @JsonProperty("oauth_nonce")
-    private String oauthNonce;
+    public void setToolConsumerInstanceUrl(String toolConsumerInstanceUrl) {
+        this.toolConsumerInstanceUrl = toolConsumerInstanceUrl;
+    }
 
-    @JsonProperty("oauth_timestamp")
-    private long oauthTimestamp;
+    public String getToolConsumerInstanceContactEmail() {
+        return toolConsumerInstanceContactEmail;
+    }
 
-    @JsonProperty("oauth_callback")
-    private String oauthCallback;
+    public void setToolConsumerInstanceContactEmail(String toolConsumerInstanceContactEmail) {
+        this.toolConsumerInstanceContactEmail = toolConsumerInstanceContactEmail;
+    }
 
-    @JsonProperty("oauth_signature_method")
-    private String oauthSignatureMethod;
+    public String getLaunchPresentationCssUrl() {
+        return launchPresentationCssUrl;
+    }
 
-    @JsonProperty("oauth_signature")
-    private String oauthSignature;
-
-    @JsonProperty("oauth_consumer_key")
-    private String oauthConsumerKey;
-
-    @JsonProperty("user_id")
-    private String userId;
-
-    @JsonProperty("lis_person_sourcedid")
-    private String lisPersonSourceId;
-
-    @JsonProperty("roles")
-    private String roles;
-
-    @JsonProperty("context_id")
-    private String contextId;
-
-    @JsonProperty("context_label")
-    private String context_label;
-
-    @JsonProperty("context_title")
-    private String context_title;
-
-    @JsonProperty("resource_link_title")
-    private String activityName;
-
-    @JsonProperty("resource_link_description")
-    private String activityDescription;
-
-    @JsonProperty("resource_link_id")
-    private String activityId;
-
-    @JsonProperty("context_type")
-    private String contextType;
-
-    @JsonProperty("lis_course_section_sourcedid")
-    private String courseSectionSourceId;
-
-    @JsonProperty("lis_course_offering_sourcedid")
-    private String lisCourseOfferingSourceId;
-
-    @JsonProperty("lis_result_sourcedid")
-    private String resultSourceId;
-
-    @JsonProperty("lis_outcome_service_url")
-    private String outcomeURL;
-
-    @JsonProperty("lis_person_name_given")
-    private String personName;
-
-    @JsonProperty("lis_person_name_family")
-    private String personSurname;
-
-    @JsonProperty("lis_person_name_full")
-    private String personFullName;
-
-    @JsonProperty("ext_user_username")
-    private String personUsername;
-
-    @JsonProperty("lis_person_contact_email_primary")
-    private String personEmail;
-
-    @JsonProperty("launch_presentation_locale")
-    private String lang;
-
-    @JsonProperty("ext_lms")
-    private String lmsName;
-
-    @JsonProperty("tool_consumer_info_product_family_code")
-    private String lmsFamilyName;
-
-    @JsonProperty("tool_consumer_info_version")
-    private String lmsVersion;
-
-    @JsonProperty("tool_consumer_instance_guid")
-    private String lmsInstanceGuid;
-
-    @JsonProperty("tool_consumer_instance_name")
-    private String lmsInstanceName;
-
-    @JsonProperty("tool_consumer_instance_description")
-    private String lmsInstanceDescription;
-
-    /**
-     * iframe, new window wtc
-     */
-    @JsonProperty("launch_presentation_document_target")
-    private String launchPresentationTarget;
-
-    @JsonProperty("launch_presentation_return_url")
-    private String returnUrl;
-
-    @JsonProperty("instructor")
-    private boolean instructor;
-
-    @JsonIgnore
-    @ElementCollection
-    @Column(length = 170)
-    private Map<String, String> customParams;
-
-    protected LTILaunchRequest() {}
+    public void setLaunchPresentationCssUrl(String launchPresentationCssUrl) {
+        this.launchPresentationCssUrl = launchPresentationCssUrl;
+    }
 
     @Override
     public String toString() {
         return "LTILaunchRequest{" +
-                "userId='" + userId + '\'' +
+                "id=" + id +
+                ", publicId='" + publicId + '\'' +
+                ", myContext=" + myContext +
+                ", ltiVersion='" + ltiVersion + '\'' +
+                ", ltiMessageType='" + ltiMessageType + '\'' +
+                ", oauthVersion=" + oauthVersion +
+                ", oauthNonce='" + oauthNonce + '\'' +
+                ", oauthTimestamp=" + oauthTimestamp +
+                ", oauthCallback='" + oauthCallback + '\'' +
+                ", oauthSignatureMethod='" + oauthSignatureMethod + '\'' +
+                ", oauthSignature='" + oauthSignature + '\'' +
+                ", oauthConsumerKey='" + oauthConsumerKey + '\'' +
+                ", userId='" + userId + '\'' +
+                ", userImage='" + userImage + '\'' +
                 ", lisPersonSourceId='" + lisPersonSourceId + '\'' +
-                ", roles=" + roles +
+                ", roles='" + roles + '\'' +
                 ", contextId='" + contextId + '\'' +
                 ", context_label='" + context_label + '\'' +
                 ", context_title='" + context_title + '\'' +
@@ -175,6 +188,7 @@ public class LTILaunchRequest {
                 ", activityId='" + activityId + '\'' +
                 ", contextType='" + contextType + '\'' +
                 ", courseSectionSourceId='" + courseSectionSourceId + '\'' +
+                ", lisCourseOfferingSourceId='" + lisCourseOfferingSourceId + '\'' +
                 ", resultSourceId='" + resultSourceId + '\'' +
                 ", outcomeURL='" + outcomeURL + '\'' +
                 ", personName='" + personName + '\'' +
@@ -189,8 +203,13 @@ public class LTILaunchRequest {
                 ", lmsInstanceGuid='" + lmsInstanceGuid + '\'' +
                 ", lmsInstanceName='" + lmsInstanceName + '\'' +
                 ", lmsInstanceDescription='" + lmsInstanceDescription + '\'' +
+                ", toolConsumerInstanceUrl='" + toolConsumerInstanceUrl + '\'' +
+                ", toolConsumerInstanceContactEmail='" + toolConsumerInstanceContactEmail + '\'' +
                 ", launchPresentationTarget='" + launchPresentationTarget + '\'' +
                 ", returnUrl='" + returnUrl + '\'' +
+                ", launchPresentationCssUrl='" + launchPresentationCssUrl + '\'' +
+                ", instructor=" + instructor +
+                ", customParams=" + customParams +
                 '}';
     }
 
@@ -371,16 +390,16 @@ public class LTILaunchRequest {
         return courseSectionSourceId;
     }
 
+    public void setCourseSectionSourceId(String courseSectionSourceId) {
+        this.courseSectionSourceId = courseSectionSourceId;
+    }
+
     public String getLisCourseOfferingSourceId() {
         return lisCourseOfferingSourceId;
     }
 
     public void setLisCourseOfferingSourceId(String lisCourseOfferingSourceId) {
         this.lisCourseOfferingSourceId = lisCourseOfferingSourceId;
-    }
-
-    public void setCourseSectionSourceId(String courseSectionSourceId) {
-        this.courseSectionSourceId = courseSectionSourceId;
     }
 
     public String getResultSourceId() {
@@ -522,17 +541,17 @@ public class LTILaunchRequest {
     }
 
     @JsonIgnore
-    public boolean isTeacher(){
+    public boolean isTeacher() {
         return this.roles.toLowerCase().contains("instructor");
     }
 
     @JsonIgnore
-    public boolean isAdmin(){
+    public boolean isAdmin() {
         return this.roles.toLowerCase().contains("administrator");
     }
 
     @JsonIgnore
-    public boolean isPrivileged(){
+    public boolean isPrivileged() {
         return isAdmin() || isTeacher();
     }
 
@@ -550,8 +569,8 @@ public class LTILaunchRequest {
         checkHost(this.returnUrl, "returnURL");
     }
 
-    private void checkHost(String s, String name){
-        if(s.toLowerCase().contains("://localhost")){
+    private void checkHost(String s, String name) {
+        if (s.toLowerCase().contains("://localhost")) {
             throw new InvalidParameterException("Field " + name + " contains /localhost/. Access the LMS using a FQDN or an IP instead of 'localhost', or cute kittens will die.");
         }
     }
@@ -565,62 +584,53 @@ public class LTILaunchRequest {
                 Float.compare(that.oauthVersion, oauthVersion) == 0 &&
                 oauthTimestamp == that.oauthTimestamp &&
                 instructor == that.instructor &&
-                publicId.equals(that.publicId) &&
-                myContext.equals(that.myContext) &&
-                ltiVersion.equals(that.ltiVersion) &&
-                ltiMessageType.equals(that.ltiMessageType) &&
-                oauthNonce.equals(that.oauthNonce) &&
-                oauthCallback.equals(that.oauthCallback) &&
-                oauthSignatureMethod.equals(that.oauthSignatureMethod) &&
-                oauthSignature.equals(that.oauthSignature) &&
-                oauthConsumerKey.equals(that.oauthConsumerKey) &&
-                userId.equals(that.userId) &&
-                lisPersonSourceId.equals(that.lisPersonSourceId) &&
-                roles.equals(that.roles) &&
-                contextId.equals(that.contextId) &&
-                context_label.equals(that.context_label) &&
-                context_title.equals(that.context_title) &&
-                activityName.equals(that.activityName) &&
-                activityDescription.equals(that.activityDescription) &&
-                activityId.equals(that.activityId) &&
-                contextType.equals(that.contextType) &&
-                courseSectionSourceId.equals(that.courseSectionSourceId) &&
-                resultSourceId.equals(that.resultSourceId) &&
-                outcomeURL.equals(that.outcomeURL) &&
-                personName.equals(that.personName) &&
-                personSurname.equals(that.personSurname) &&
-                personFullName.equals(that.personFullName) &&
-                personUsername.equals(that.personUsername) &&
-                personEmail.equals(that.personEmail) &&
-                lang.equals(that.lang) &&
-                lmsName.equals(that.lmsName) &&
-                lmsFamilyName.equals(that.lmsFamilyName) &&
-                lmsVersion.equals(that.lmsVersion) &&
-                lmsInstanceGuid.equals(that.lmsInstanceGuid) &&
-                lmsInstanceName.equals(that.lmsInstanceName) &&
-                lmsInstanceDescription.equals(that.lmsInstanceDescription) &&
-                launchPresentationTarget.equals(that.launchPresentationTarget) &&
-                returnUrl.equals(that.returnUrl) &&
-                customParams.equals(that.customParams);
+                Objects.equals(publicId, that.publicId) &&
+                Objects.equals(myContext, that.myContext) &&
+                Objects.equals(ltiVersion, that.ltiVersion) &&
+                Objects.equals(ltiMessageType, that.ltiMessageType) &&
+                Objects.equals(oauthNonce, that.oauthNonce) &&
+                Objects.equals(oauthCallback, that.oauthCallback) &&
+                Objects.equals(oauthSignatureMethod, that.oauthSignatureMethod) &&
+                Objects.equals(oauthSignature, that.oauthSignature) &&
+                Objects.equals(oauthConsumerKey, that.oauthConsumerKey) &&
+                Objects.equals(userId, that.userId) &&
+                Objects.equals(userImage, that.userImage) &&
+                Objects.equals(lisPersonSourceId, that.lisPersonSourceId) &&
+                Objects.equals(roles, that.roles) &&
+                Objects.equals(contextId, that.contextId) &&
+                Objects.equals(context_label, that.context_label) &&
+                Objects.equals(context_title, that.context_title) &&
+                Objects.equals(activityName, that.activityName) &&
+                Objects.equals(activityDescription, that.activityDescription) &&
+                Objects.equals(activityId, that.activityId) &&
+                Objects.equals(contextType, that.contextType) &&
+                Objects.equals(courseSectionSourceId, that.courseSectionSourceId) &&
+                Objects.equals(lisCourseOfferingSourceId, that.lisCourseOfferingSourceId) &&
+                Objects.equals(resultSourceId, that.resultSourceId) &&
+                Objects.equals(outcomeURL, that.outcomeURL) &&
+                Objects.equals(personName, that.personName) &&
+                Objects.equals(personSurname, that.personSurname) &&
+                Objects.equals(personFullName, that.personFullName) &&
+                Objects.equals(personUsername, that.personUsername) &&
+                Objects.equals(personEmail, that.personEmail) &&
+                Objects.equals(lang, that.lang) &&
+                Objects.equals(lmsName, that.lmsName) &&
+                Objects.equals(lmsFamilyName, that.lmsFamilyName) &&
+                Objects.equals(lmsVersion, that.lmsVersion) &&
+                Objects.equals(lmsInstanceGuid, that.lmsInstanceGuid) &&
+                Objects.equals(lmsInstanceName, that.lmsInstanceName) &&
+                Objects.equals(lmsInstanceDescription, that.lmsInstanceDescription) &&
+                Objects.equals(toolConsumerInstanceUrl, that.toolConsumerInstanceUrl) &&
+                Objects.equals(toolConsumerInstanceContactEmail, that.toolConsumerInstanceContactEmail) &&
+                Objects.equals(launchPresentationTarget, that.launchPresentationTarget) &&
+                Objects.equals(returnUrl, that.returnUrl) &&
+                Objects.equals(launchPresentationCssUrl, that.launchPresentationCssUrl) &&
+                Objects.equals(customParams, that.customParams);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, publicId, myContext,
-                ltiVersion, ltiMessageType, oauthVersion,
-                oauthNonce, oauthTimestamp, oauthCallback,
-                oauthSignatureMethod, oauthSignature,
-                oauthConsumerKey, userId, lisPersonSourceId,
-                roles, contextId, context_label, context_title,
-                activityName, activityDescription, activityId,
-                contextType, courseSectionSourceId, resultSourceId,
-                outcomeURL, personName, personSurname, personFullName,
-                personUsername, personEmail, lang, lmsName,
-                lmsFamilyName, lmsVersion, lmsInstanceGuid,
-                lmsInstanceName, lmsInstanceDescription,
-                launchPresentationTarget, returnUrl,
-                instructor, customParams
-        );
+        return Objects.hash(id, publicId, myContext, ltiVersion, ltiMessageType, oauthVersion, oauthNonce, oauthTimestamp, oauthCallback, oauthSignatureMethod, oauthSignature, oauthConsumerKey, userId, userImage, lisPersonSourceId, roles, contextId, context_label, context_title, activityName, activityDescription, activityId, contextType, courseSectionSourceId, lisCourseOfferingSourceId, resultSourceId, outcomeURL, personName, personSurname, personFullName, personUsername, personEmail, lang, lmsName, lmsFamilyName, lmsVersion, lmsInstanceGuid, lmsInstanceName, lmsInstanceDescription, toolConsumerInstanceUrl, toolConsumerInstanceContactEmail, launchPresentationTarget, returnUrl, launchPresentationCssUrl, instructor, customParams);
     }
 }
 
