@@ -166,7 +166,6 @@ public class LTILaunchRequest {
         return "LTILaunchRequest{" +
                 "id=" + id +
                 ", publicId='" + publicId + '\'' +
-                ", myContext=" + myContext +
                 ", ltiVersion='" + ltiVersion + '\'' +
                 ", ltiMessageType='" + ltiMessageType + '\'' +
                 ", oauthVersion=" + oauthVersion +
