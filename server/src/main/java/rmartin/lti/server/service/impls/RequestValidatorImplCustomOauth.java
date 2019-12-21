@@ -63,7 +63,7 @@ public class RequestValidatorImplCustomOauth implements RequestValidator {
         var toSign = getSignatureString(method, url, params);
         var signature = getSignature(toSign, secret);
         if(!signature.equals(clientSignatures[0])){
-            throw new RuntimeException(String.format("Signature mismatch. Got (%s), calculated (%s)", clientSignatures[0], signature));
+            throw new RuntimeException(String.format("Signature mismatch. URL is (%s). Got (%s), calculated (%s)", url, clientSignatures[0], signature));
         }
     }
 
@@ -156,7 +156,7 @@ public class RequestValidatorImplCustomOauth implements RequestValidator {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
-            log.info("Invalid request: " +e.getCause());
+            log.info("Invalid request: " +e.getMessage() + ", Caused by: " + e.getCause());
             log.debug(e.toString());
             return false;
         }
