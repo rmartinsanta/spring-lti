@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/admin")
 @PreAuthorize("hasRole('ADMIN')")
-public class AdminController {
+public class ConsumerController {
 
     @Autowired
     private ConsumerRepository consumerRepository;

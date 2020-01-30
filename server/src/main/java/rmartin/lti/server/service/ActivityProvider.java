@@ -9,4 +9,5 @@ public interface ActivityProvider {
     Activity getActivity(String id);
     boolean canLaunch(String id);
     boolean exists(String id);
+
 }

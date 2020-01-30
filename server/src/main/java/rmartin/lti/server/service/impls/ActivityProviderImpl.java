@@ -43,4 +43,6 @@ public class ActivityProviderImpl implements ActivityProvider {
     public boolean exists(String id) {
         return this.activities.containsKey(id);
     }
+
+
 }
