@@ -4,6 +4,7 @@ import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStyle;
 import org.springframework.shell.table.*;
 import rmartin.lti.api.model.Consumer;
+import rmartin.lti.server.model.ActivityProvider;
 
 import java.util.LinkedHashMap;
 
@@ -31,6 +32,16 @@ public class ShellUtils {
         headers.put("role", "Role");
         headers.put("secret", "Secret");
         TableModel model = new BeanListTableModel<>(consumers, headers);
+        TableBuilder builder = new TableBuilder(model);
+        return applyStyle(builder).build();
+    }
+
+    static Table getActivitiesAsTable(Iterable<ActivityProvider> activityProviders){
+        LinkedHashMap<String, Object> headers = new LinkedHashMap<>();
+        headers.put("id", "Id");
+        headers.put("name", "Name");
+        headers.put("secret", "Secret");
+        TableModel model = new BeanListTableModel<>(activityProviders, headers);
         TableBuilder builder = new TableBuilder(model);
         return applyStyle(builder).build();
     }

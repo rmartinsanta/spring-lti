@@ -2,65 +2,54 @@ package rmartin.lti.demo_plugin;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import rmartin.lti.api.model.Activity;
 import rmartin.lti.api.model.ActivityConfig;
 import rmartin.lti.api.model.LTIContext;
 import rmartin.lti.api.model.enums.ConfigKeys;
-import rmartin.lti.api.service.ConfigService;
-import rmartin.lti.api.service.ContextService;
 import rmartin.lti.api.service.IOUtils;
-
-import static rmartin.lti.demo_plugin.TestActivityController.ACTIVITY_ID;
+import rmartin.lti.demo_plugin.lti_api.ContextService;
+import rmartin.lti.demo_plugin.lti_api.GradeService;
 
 @Controller
-@RequestMapping("/"+ACTIVITY_ID)
-public class TestActivityController extends Activity {
+public class TestActivityController {
 
-    public static final String ACTIVITY_ID = "test";
+    public static final String LAUNCH_URL = "/lti/start/";
     private static final Logger log  = Logger.getLogger(TestActivityController.class);
 
     private final ContextService contextService;
-    private final ConfigService configService;
+    private final GradeService gradeService;
+
+    @Value("lti.activity.debug")
+    private boolean debug;
 
     @Autowired
-    public TestActivityController(ContextService contextService, ConfigService configService) {
+    public TestActivityController(ContextService contextService, GradeService gradeService) {
         this.contextService = contextService;
-        this.configService = configService;
+        this.gradeService = gradeService;
     }
 
-    @Override
-    public String getactivityId() {
-        return ACTIVITY_ID;
-    }
-
-    @GetMapping("/{id}")
+    @GetMapping(LAUNCH_URL + "{id}")
     public ModelAndView handleActivityLaunch(ModelAndView modelView, @PathVariable String id){
 
-        LTIContext context = this.getContext(id);
+        LTIContext context = contextService.getContext(id);
         modelView.setViewName("TestActivity/index");
 
-        modelView.addObject("canSubmit", !cannotRetry(context));
+        modelView.addObject("canSubmit", !this.gradeService.cannotRetry(context));
         modelView.addObject("canSubmit", context.getConfig().getBool(ConfigKeys.CAN_RETRY));
-        modelView.addObject("postUrl", "/"+ACTIVITY_ID+"/end");
-
+        modelView.addObject("postUrl", "/"+ LAUNCH_URL +"/end");
         modelView.addObject("c", context);
 
-        if(isDebugEnabled()){
+        if(debug){
             modelView.addObject("debug", IOUtils.object2Map(context));
             modelView.addObject("isdebug", true);
-
             modelView.addObject("requests", context.getLaunchRequests());
         }
 
-        // After the launch, we consumed the context data from Redis.
-        // We can reuse Redis to store in use contexts, BUT under a different key only known by us and the current view
-
-        String secretKey = contextService.store(context);
-
+        String secretKey = contextService.storeContext(context, false);
         modelView.addObject("secretKey", secretKey);
 
         return modelView;
@@ -72,27 +61,23 @@ public class TestActivityController extends Activity {
             return "ScoreMustBeBetween0And1";
         }
 
-        LTIContext context = this.contextService.get(secretKey);
+        LTIContext context = this.contextService.getContext(secretKey);
         if(context == null){
             return "KeyDoesNotExistOrHasAlreadyBeenUsed";
         }
 
-
-//        if(!context.getConfig().getBool(DemoConfig.CAN_RETRY) && !context.getResults().isEmpty()){
-//            throw new GradeException("Retry is disabled and a result has already been submitted");
-//        }
-
-        this.grade(context, score);
+        this.gradeService.grade(context, score);
         // Grade the activity, and return control to LMS
         return "redirect:"+context.getLastRequest().getReturnUrl();
     }
 
     @PostMapping("/allowRetry")
-    public ResponseEntity setAllowRetry(boolean allowRetry, String secretKey){
+    public ResponseEntity<?> setAllowRetry(boolean allowRetry, String secretKey){
         log.info("Change in TestActivity Config -- Set AllowRetry to "+allowRetry);
-        ActivityConfig config = contextService.get(secretKey).getConfig();
+        LTIContext context = contextService.getContext(secretKey);
+        ActivityConfig config = context.getConfig();
         config.setValue(ConfigKeys.CAN_RETRY, allowRetry);
-        configService.save(config);
+        contextService.storeContext(context, true);
         return ResponseEntity.ok().build();
     }
 }

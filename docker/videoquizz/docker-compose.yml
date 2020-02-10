@@ -36,7 +36,7 @@ services:
       - redis
       - rabbitmq
     build:
-      dockerfile: Dockerfile
+      dockerfile: lti.Dockerfile
       context: ../../
     container_name: lti
     tty: true
@@ -44,9 +44,6 @@ services:
     ports:
       - 8080:8080
       - 5005:5005
-    links:
-      - mysql
-      - redis
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/videoquizz?useSSL=false
       - SPRING_DATASOURCE_USERNAME=videoquizz
@@ -54,12 +51,25 @@ services:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_REDIS_HOST=redis
       - MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS=always
-      - LOADER_PATH=/plugins
-      - LOGGING_LEVEL_ROOT=DEBUG
-    volumes:
-      - ./plugins:/plugins
-      - ./views:/views
+      - LOGGING_LEVEL_ROOT=INFO
 
     # Explicitly wait until MySQL is ready to accept connections.
     # Because the relational DB is the slowest to start up, we do not need to explicitly wait for the rest of services.
     command: ["./wait-for-it.sh", "mysql:3306", "--", "asd", "asd"]
+
+    demo:
+      # Example lti integration.
+      build:
+        dockerfile: demo.Dockerfile
+        context: ../../
+      container_name: demo
+      tty: true
+      stdin_open: true
+      ports:
+        - 8081:8081
+        - 5005:5005
+      environment:
+        - LOGGING_LEVEL_ROOT=INFO
+
+      # Explicitly wait until MySQL is ready to accept connections.
+      # Because the relational DB is the slowest to start up, we do not need to explicitly wait for the rest of services.

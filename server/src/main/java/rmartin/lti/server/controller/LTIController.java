@@ -3,6 +3,7 @@ package rmartin.lti.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.imsglobal.lti.launch.LtiOauthVerifier;
 import org.imsglobal.lti.launch.LtiVerificationException;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import rmartin.lti.api.model.LTIContext;
 import rmartin.lti.api.service.ContextService;
 import rmartin.lti.api.service.Redis;
 import rmartin.lti.server.service.*;
+import rmartin.lti.server.service.impls.ActivityProviderServiceImpl;
 import rmartin.lti.server.service.impls.ContextServiceImpl;
 import rmartin.lti.server.service.impls.GradeServiceImpl;
 import rmartin.lti.server.service.impls.KeyServiceImpl;
@@ -31,13 +33,15 @@ import java.util.Map;
 @RequestMapping("/lti")
 public class LTIController {
 
+    private static final Logger log = Logger.getLogger(ActivityProviderServiceImpl.class);
+
     private final KeyService keyService;
 
     private final GradeService gradeService;
 
     private final ContextService contextService;
 
-    private final ActivityProvider activityProvider;
+    private final ActivityProviderService activityProviderService;
 
     private final Redis redis;
 
@@ -46,11 +50,11 @@ public class LTIController {
     private final RequestValidator validator;
 
     @Autowired
-    public LTIController(KeyServiceImpl keyService, GradeServiceImpl gradeService, ContextServiceImpl launchService, ActivityProvider activityProvider, Redis redis, ObjectMapper mapper, RequestValidator validator) {
+    public LTIController(KeyServiceImpl keyService, GradeServiceImpl gradeService, ContextServiceImpl launchService, ActivityProviderService activityProviderService, Redis redis, ObjectMapper mapper, RequestValidator validator) {
         this.keyService = keyService;
         this.gradeService = gradeService;
         this.contextService = launchService;
-        this.activityProvider = activityProvider;
+        this.activityProviderService = activityProviderService;
         this.redis = redis;
         this.mapper = mapper;
         this.validator = validator;
@@ -76,9 +80,9 @@ public class LTIController {
         return "test";
     }
 
-    @PostMapping(value = "/launch/{activityId}", consumes = {"application/x-www-form-urlencoded"})
+    @PostMapping(value = "/launch/{activityName}", consumes = {"application/x-www-form-urlencoded"})
     //@LTISigned
-    public String launchApp(HttpServletRequest request, @PathVariable String activityId) {
+    public String launchApp(HttpServletRequest request, @PathVariable String activityName) {
         Map<String, String[]> launchParams = request.getParameterMap();
         if(!validator.isValidRequest(request)){
             return "redirect:/invalid-lti";
@@ -102,10 +106,13 @@ public class LTIController {
         launchRequest.validate();
 
         // Check that the activity exists, and has permission to launch it
-        if(!this.activityProvider.exists(activityId))
-            throw new ActivityNotFoundException("Activity: " + activityId + "does not exist");
+        var potentialActivity = activityProviderService.getActivityByName(activityName);
+        if(!potentialActivity.isPresent()){
+            throw new ActivityNotFoundException("Activity: " + activityName + "does not exist");
+        }
 
-        if (!this.activityProvider.canLaunch(activityId)) {
+        var activity = potentialActivity.get();
+        if (!this.activityProviderService.canLaunch(launchRequest.getOauthConsumerKey(), activity)) {
             throw new ActivityInsufficientPermissionException("Insufficient permissions");
         }
 
@@ -117,7 +124,8 @@ public class LTIController {
         redis.saveForLaunch(context, publicId);
 
         // Trigger activiy launch
-        return "redirect:/"+activityId+"/"+ publicId;
+
+        return "redirect:"+activity.getUrl()+"/"+ publicId;
     }
 
 }

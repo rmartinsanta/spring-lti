@@ -1,6 +1,7 @@
 package rmartin.lti.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import rmartin.lti.api.model.enums.ContextStatus;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class LTIContext {
     private long id;
 
     @Transient
+    @JsonManagedReference
     private ActivityConfig config;
 
     @Transient

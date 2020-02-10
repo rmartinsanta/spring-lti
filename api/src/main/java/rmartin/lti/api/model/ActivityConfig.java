@@ -1,11 +1,11 @@
 package rmartin.lti.api.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.codehaus.jackson.map.ObjectMapper;
-import rmartin.lti.api.model.enums.ConfigKeys;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -22,23 +22,37 @@ public final class ActivityConfig {
     @JsonProperty
     private long id;
 
+    @JsonProperty
+    private boolean isDefault;
+
+    @JsonProperty
+    private String clientId;
+
+    @JsonProperty
+    private String activityProviderId;
+
     @Transient
     @JsonIgnore
     private Map<String, Object> config = new HashMap<>();
 
     @JsonProperty
-    private String activityId;
-
-    @JsonProperty
-    private String clientId;
+    @JsonBackReference
+    private LTIContext context;
 
     protected ActivityConfig() {}
 
-    public ActivityConfig(String clientId, String activityId) {
-        this.activityId = activityId;
-        this.clientId = clientId;
-        config.put(ConfigKeys.CAN_RETRY.toString(), true);
+    /**
+     * Create a DEFAULT config that will be used as the base for the other configs
+     * @param context current context
+     * @param isDefault save as default config for all activities for the current client
+     */
+    public ActivityConfig(LTIContext context, String activityProviderId, boolean isDefault) {
+        this.context = context;
+        this.clientId = context.getClient();
+        this.activityProviderId = activityProviderId;
+        this.isDefault = isDefault;
     }
+
 
     @SuppressWarnings("unchecked")
     public <T, E extends Enum<E>> T getValue(E key){
