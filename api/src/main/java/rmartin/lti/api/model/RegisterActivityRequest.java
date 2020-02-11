@@ -15,6 +15,9 @@ public class RegisterActivityRequest {
     @JsonProperty("secret")
     private String secret;
 
+    protected RegisterActivityRequest() {
+    }
+
     public RegisterActivityRequest(String activityName, String url) {
         this.activityName = activityName;
         this.url = url;
@@ -36,9 +39,26 @@ public class RegisterActivityRequest {
         this.secret = secret;
     }
 
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public boolean isValid(){
         return      !Objects.requireNonNull(activityName).trim().isEmpty()
                 &&  !Objects.requireNonNull(url).trim().isEmpty()
                 &&  !Objects.requireNonNull(secret).trim().isEmpty();
+    }
+
+    @Override
+    public String toString() {
+        return "RegisterActivityRequest{" +
+                "activityName='" + activityName + '\'' +
+                ", url='" + url + '\'' +
+                ", secret='" + secret + '\'' +
+                '}';
     }
 }

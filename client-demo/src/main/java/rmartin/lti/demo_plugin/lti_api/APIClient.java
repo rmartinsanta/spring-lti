@@ -17,9 +17,9 @@ public class APIClient {
 
     private static final Logger logger = Logger.getLogger(APIClient.class);
 
-    private static final String REGISTER_ACTIVITY_ENDPOINT = "/activity";
-    private static final String SCORE_ENDPOINT = "/score";
-    private static final String CONTEXT_ENDPOINT = "/context";
+    private static final String REGISTER_ACTIVITY_ENDPOINT = "/activity/";
+    private static final String SCORE_ENDPOINT = "/score/";
+    private static final String CONTEXT_ENDPOINT = "/context/";
 
     @Value("${lti.proxy.url}")
     private String baseUrl;
@@ -46,6 +46,7 @@ public class APIClient {
 
     public RegisterActivityResponse registerActivity(RegisterActivityRequest request){
         request.setSecret(secret);
+        logger.info("POST " + baseUrl + REGISTER_ACTIVITY_ENDPOINT + ", data: " + request);
         var response = client.postForEntity(baseUrl + REGISTER_ACTIVITY_ENDPOINT, request, RegisterActivityResponse.class);
         return valid(response);
     }

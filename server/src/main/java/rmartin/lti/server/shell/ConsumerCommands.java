@@ -34,7 +34,7 @@ public class ConsumerCommands {
     @ShellMethod(key = "consumer find", value = "Find a consumer with the given username")
     public Object findConsumer(String username){
         var consumer = consumerService.findByUsername(username);
-        if(!consumer.isPresent()){
+        if(consumer.isEmpty()){
             return error("Could not find a customer with username '%s'", username);
         }
         var data = Collections.singleton(consumer.get());

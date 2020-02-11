@@ -9,6 +9,7 @@
             <option value="mysql" />
             <option value="rabbitmq" />
             <option value="redis" />
+            <option value="demo" />
           </list>
         </option>
         <option name="sourceFilePath" value="docker/videoquizz/docker-compose.yml" />

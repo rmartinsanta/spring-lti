@@ -49,4 +49,8 @@ public class ActivityProvider {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public long getId() {
+        return id;
+    }
 }

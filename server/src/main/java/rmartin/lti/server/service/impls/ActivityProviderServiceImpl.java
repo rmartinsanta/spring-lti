@@ -61,7 +61,7 @@ public class ActivityProviderServiceImpl implements ActivityProviderService {
     public ActivityProvider removeActivity(String name) {
         log.info("Deleting activity with name: " + name);
         var activity = this.repository.findByName(name);
-        if (!activity.isPresent()) {
+        if (activity.isEmpty()) {
             throw new RuntimeException("Could not find an activitywith name: " + name);
         }
         this.repository.delete(activity.get());
@@ -77,7 +77,7 @@ public class ActivityProviderServiceImpl implements ActivityProviderService {
     @Override
     public void updateActivityProvider(RegisterActivityRequest dto) {
         var posibleActivity = repository.findBySecret(dto.getSecret());
-        if (!posibleActivity.isPresent()) {
+        if (posibleActivity.isEmpty()) {
             throw new ActivityNotFoundException("Cannot find any activity for the provided secret: " + dto.getSecret());
         }
         log.info("Updating activity with secret: " + dto.getSecret());
