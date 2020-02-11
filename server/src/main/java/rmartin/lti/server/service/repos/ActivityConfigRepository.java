@@ -4,6 +4,8 @@ import rmartin.lti.api.model.ActivityConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ActivityConfigRepository extends JpaRepository<ActivityConfig, Long> {
 
@@ -15,4 +17,5 @@ public interface ActivityConfigRepository extends JpaRepository<ActivityConfig, 
      */
     ActivityConfig findByClientIdAndActivityProviderIdAndGlobalIsTrue(String clientId, String activityProvider);
 
+    Optional<ActivityConfig> findByLtiContextId(long contextId);
 }

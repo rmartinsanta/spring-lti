@@ -28,6 +28,11 @@ public class APIExceptionHandler {
         return logAndRespond(HttpStatus.BAD_REQUEST, e, "Invalid signature");
     }
 
+    @ExceptionHandler(LTIException.class)
+    public ResponseEntity<LTIErrorResponse> ltiExceptionHandler(LTIException e){
+        return logAndRespond(HttpStatus.BAD_REQUEST, e, e.getMessage());
+    }
+
     @ExceptionHandler(ActivityNotFoundException.class)
     public ResponseEntity<LTIErrorResponse> activityNotFound(ActivityNotFoundException e){
         return logAndRespond(HttpStatus.NOT_FOUND, e, "Activity not found");

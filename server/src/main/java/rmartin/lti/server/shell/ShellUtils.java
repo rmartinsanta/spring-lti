@@ -40,6 +40,7 @@ public class ShellUtils {
         LinkedHashMap<String, Object> headers = new LinkedHashMap<>();
         headers.put("id", "Id");
         headers.put("name", "Name");
+        headers.put("url", "Url");
         headers.put("secret", "Secret");
         TableModel model = new BeanListTableModel<>(activityProviders, headers);
         TableBuilder builder = new TableBuilder(model);

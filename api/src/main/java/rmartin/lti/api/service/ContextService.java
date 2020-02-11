@@ -11,9 +11,10 @@ public interface ContextService {
     /**
      * Retrieve the context associated with a LTIRequest
      * @param ltiLaunchRequest
-     * @return
+     * @param activityName
+     * @return LTIContext
      */
-    LTIContext getOrInitialize(LTILaunchRequest ltiLaunchRequest);
+    LTIContext getOrInitialize(LTILaunchRequest ltiLaunchRequest, String activityName);
 
     /**
      * Store a

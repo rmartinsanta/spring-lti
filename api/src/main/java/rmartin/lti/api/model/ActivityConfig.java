@@ -38,18 +38,17 @@ public final class ActivityConfig {
     @JsonProperty
     @JsonBackReference
     @Transient
-    private LTIContext context;
+    private long ltiContextId;
 
     protected ActivityConfig() {}
 
     /**
      * Create a DEFAULT config that will be used as the base for the other configs
-     * @param context current context
      * @param global save as default config for all activities for the current client
      */
-    public ActivityConfig(LTIContext context, String activityProviderId, boolean global) {
-        this.context = context;
-        this.clientId = context.getClient();
+    public ActivityConfig(long ltiContextId, String clientId, String activityProviderId, boolean global) {
+        this.ltiContextId = ltiContextId;
+        this.clientId = clientId;
         this.activityProviderId = activityProviderId;
         this.global = global;
     }
@@ -81,6 +80,11 @@ public final class ActivityConfig {
         return this.config.keySet();
     }
 
+    @JsonIgnore
+    public Map<String, Object> getConfig(){
+        return this.config;
+    }
+
     @Access(AccessType.PROPERTY)
     @JsonProperty
     public String getSerialized(){
@@ -100,5 +104,25 @@ public final class ActivityConfig {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public long getLtiContextId() {
+        return ltiContextId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public boolean isGlobal() {
+        return global;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getActivityProviderId() {
+        return activityProviderId;
     }
 }

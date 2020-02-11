@@ -42,6 +42,8 @@ public class LTIContext {
 
     private String roles;
 
+    private String activityProviderName;
+
     private ContextStatus status = ContextStatus.NOT_SET;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -60,7 +62,7 @@ public class LTIContext {
     protected LTIContext() {
     }
 
-    public LTIContext(LTILaunchRequest launchRequest) {
+    public LTIContext(LTILaunchRequest launchRequest, String activityProviderName) {
         this.launchRequests.add(launchRequest);
         launchRequest.setMyContext(this);
         this.creat = Instant.now().toEpochMilli();
@@ -69,6 +71,7 @@ public class LTIContext {
         this.client = launchRequest.getOauthConsumerKey();
         this.roles = launchRequest.getRoles();
         this.userId = launchRequest.getUserId();
+        this.activityProviderName = activityProviderName;
     }
 
 
@@ -165,6 +168,14 @@ public class LTIContext {
 
     public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
+    }
+
+    public String getActivityProviderName() {
+        return activityProviderName;
+    }
+
+    public void setActivityProviderName(String activityProviderName) {
+        this.activityProviderName = activityProviderName;
     }
 
     @JsonIgnore

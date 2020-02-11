@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import rmartin.lti.api.exception.ActivityInsufficientPermissionException;
 import rmartin.lti.api.exception.ActivityNotFoundException;
 import rmartin.lti.api.exception.InvalidCredentialsException;
+import rmartin.lti.api.exception.LTIException;
 import rmartin.lti.api.model.LTILaunchRequest;
 import rmartin.lti.api.model.LTIContext;
+import rmartin.lti.api.service.ConfigService;
 import rmartin.lti.api.service.ContextService;
 import rmartin.lti.api.service.Redis;
 import rmartin.lti.server.service.*;
@@ -41,6 +43,8 @@ public class LTIController {
 
     private final ContextService contextService;
 
+    private final ConfigService configService;
+
     private final ActivityProviderService activityProviderService;
 
     private final Redis redis;
@@ -50,10 +54,11 @@ public class LTIController {
     private final RequestValidator validator;
 
     @Autowired
-    public LTIController(KeyServiceImpl keyService, GradeServiceImpl gradeService, ContextServiceImpl launchService, ActivityProviderService activityProviderService, Redis redis, ObjectMapper mapper, RequestValidator validator) {
+    public LTIController(KeyServiceImpl keyService, GradeServiceImpl gradeService, ContextServiceImpl launchService, ConfigService configService, ActivityProviderService activityProviderService, Redis redis, ObjectMapper mapper, RequestValidator validator) {
         this.keyService = keyService;
         this.gradeService = gradeService;
         this.contextService = launchService;
+        this.configService = configService;
         this.activityProviderService = activityProviderService;
         this.redis = redis;
         this.mapper = mapper;
@@ -107,24 +112,34 @@ public class LTIController {
 
         // Check that the activity exists, and has permission to launch it
         var potentialActivity = activityProviderService.getActivityByName(activityName);
-        if(!potentialActivity.isPresent()){
+        if(potentialActivity.isEmpty()){
             throw new ActivityNotFoundException("Activity: " + activityName + "does not exist");
         }
 
+        // todo limpiar excepciones y todas las que esten relacionadas con LTI lanzarlas a traves de ella.
+        // Revisar docs de spring formas recomendadas de manejo de errores/excepciones
         var activity = potentialActivity.get();
         if (!this.activityProviderService.canLaunch(launchRequest.getOauthConsumerKey(), activity)) {
             throw new ActivityInsufficientPermissionException("Insufficient permissions");
         }
 
+        if(activity.getUrl() == null || activity.getUrl().trim().isEmpty()){
+            throw new LTIException("Activity exists, but URL is not configured yet");
+        }
+
+        log.info("Launch request successfully validated, generating context and pushing data");
+
         // We have the data, is it from an existing user? is it the first visit?
-        LTIContext context = contextService.getOrInitialize(launchRequest);
+        LTIContext context = contextService.getOrInitialize(launchRequest, activityName);
+
+        // Context does not store activity configuration in DB, configuration is delegated to the appropriate service
+        configService.calculateConfig(context);
 
         // Push data to Redis
         String publicId = launchRequest.getPublicId();
         redis.saveForLaunch(context, publicId);
 
         // Trigger activiy launch
-
         return "redirect:"+activity.getUrl()+"/"+ publicId;
     }
 
