@@ -19,7 +19,7 @@ public class StartListener implements ApplicationListener<ApplicationReadyEvent>
     private final ConsumerService consumerService;
     private final ActivityProviderService activityProviderService;
 
-    @Value("server.createdefaults")
+    @Value("${server.createdefaults}")
     private boolean createDefaults;
 
     @Autowired

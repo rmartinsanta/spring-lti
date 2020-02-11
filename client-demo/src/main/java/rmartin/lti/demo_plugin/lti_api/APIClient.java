@@ -21,10 +21,10 @@ public class APIClient {
     private static final String SCORE_ENDPOINT = "/score";
     private static final String CONTEXT_ENDPOINT = "/context";
 
-    @Value("lti.proxy.url")
+    @Value("${lti.proxy.url}")
     private String baseUrl;
 
-    @Value("lti.activity.secret")
+    @Value("${lti.activity.secret}")
     private String secret;
 
     private RestTemplate client;

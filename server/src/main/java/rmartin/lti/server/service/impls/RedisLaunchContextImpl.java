@@ -75,7 +75,6 @@ public class RedisLaunchContextImpl implements Redis {
     @Override
     public void saveForLaunch(LTIContext context, String key){
         launches.put(key, context);
-        //this.setExpire("Context_"+context.getId());
         this.setExpire(key);
     }
 
@@ -86,16 +85,5 @@ public class RedisLaunchContextImpl implements Redis {
     private void setExpire(String key) {
         tokens.set(key, "");
         redisTokens.expire(key, expiresInMillis, TimeUnit.MILLISECONDS);
-    }
-
-    @Override
-    public LTIContext getDataClient(String key) {
-        if(this.pendingContexts.hasKey(key)){
-            LTIContext context = this.pendingContexts.get(key);
-            this.pendingContexts.delete(key);
-            return context;
-        }
-
-        return null;
     }
 }

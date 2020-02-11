@@ -9,5 +9,4 @@ public interface Redis {
 
     void saveForClient(LTIContext context, String key);
 
-    LTIContext getDataClient(String key);
 }

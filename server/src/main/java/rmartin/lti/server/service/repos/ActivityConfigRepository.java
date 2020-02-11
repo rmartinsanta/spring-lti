@@ -7,13 +7,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ActivityConfigRepository extends JpaRepository<ActivityConfig, Long> {
 
-    //ActivityConfig findByClientIdAndActivityId(String clientId, String activityId);
-
     /**
      * Find default activity config for a (client, activity provider) tuple
      * @param clientId client id
      * @param activityProvider activity provider
      * @return Default config for the clientId and activityProvider tuple
      */
-    ActivityConfig findByClientIdAndActivityProviderIdAndDefaultIsTrue(String clientId, String activityProvider);
+    ActivityConfig findByClientIdAndActivityProviderIdAndGlobalIsTrue(String clientId, String activityProvider);
+
 }

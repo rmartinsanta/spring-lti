@@ -13,9 +13,9 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api" target="10" />
-      <module name="client-demo" target="10" />
+      <module name="client-demo" target="11" />
       <module name="parent" target="10" />
-      <module name="server" target="10" />
+      <module name="server" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

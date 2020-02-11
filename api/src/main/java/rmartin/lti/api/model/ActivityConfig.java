@@ -23,7 +23,7 @@ public final class ActivityConfig {
     private long id;
 
     @JsonProperty
-    private boolean isDefault;
+    private boolean global;
 
     @JsonProperty
     private String clientId;
@@ -37,6 +37,7 @@ public final class ActivityConfig {
 
     @JsonProperty
     @JsonBackReference
+    @Transient
     private LTIContext context;
 
     protected ActivityConfig() {}
@@ -44,13 +45,13 @@ public final class ActivityConfig {
     /**
      * Create a DEFAULT config that will be used as the base for the other configs
      * @param context current context
-     * @param isDefault save as default config for all activities for the current client
+     * @param global save as default config for all activities for the current client
      */
-    public ActivityConfig(LTIContext context, String activityProviderId, boolean isDefault) {
+    public ActivityConfig(LTIContext context, String activityProviderId, boolean global) {
         this.context = context;
         this.clientId = context.getClient();
         this.activityProviderId = activityProviderId;
-        this.isDefault = isDefault;
+        this.global = global;
     }
 
 

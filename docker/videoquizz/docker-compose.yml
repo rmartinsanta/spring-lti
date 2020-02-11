@@ -57,19 +57,18 @@ services:
     # Because the relational DB is the slowest to start up, we do not need to explicitly wait for the rest of services.
     command: ["./wait-for-it.sh", "mysql:3306", "--", "asd", "asd"]
 
-    demo:
-      # Example lti integration.
-      build:
-        dockerfile: demo.Dockerfile
-        context: ../../
-      container_name: demo
-      tty: true
-      stdin_open: true
-      ports:
-        - 8081:8081
-        - 5005:5005
-      environment:
-        - LOGGING_LEVEL_ROOT=INFO
+  demo:
+    # Example lti integration.
+    build:
+      dockerfile: demo.Dockerfile
+      context: ../../
+    container_name: demo
+    tty: true
+    stdin_open: true
+    ports:
+      - 8081:8081
+    environment:
+      - LOGGING_LEVEL_ROOT=INFO
 
-      # Explicitly wait until MySQL is ready to accept connections.
-      # Because the relational DB is the slowest to start up, we do not need to explicitly wait for the rest of services.
+    # Explicitly wait until MySQL is ready to accept connections.
+    # Because the relational DB is the slowest to start up, we do not need to explicitly wait for the rest of services.

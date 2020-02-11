@@ -16,11 +16,8 @@ import java.time.Instant;
 public class ContextServiceImpl implements ContextService {
 
     private final ContextRepository contextRepository;
-
     private final SecretService secretService;
-
     private final ConfigService configService;
-
     private final Redis redis;
 
     @Autowired
@@ -61,6 +58,6 @@ public class ContextServiceImpl implements ContextService {
     }
 
     public LTIContext get(String key){
-        return redis.getDataClient(key);
+        return redis.getLTIContext(key);
     }
 }

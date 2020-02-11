@@ -23,7 +23,7 @@ public class TestActivityController {
     private final ContextService contextService;
     private final GradeService gradeService;
 
-    @Value("lti.activity.debug")
+    @Value("${lti.activity.debug}")
     private boolean debug;
 
     @Autowired
