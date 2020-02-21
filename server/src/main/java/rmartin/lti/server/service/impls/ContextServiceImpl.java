@@ -36,7 +36,6 @@ public class ContextServiceImpl implements ContextService {
         String key = secretService.generateSecret();
         ltiLaunchRequest.setPublicId(key);
 
-
         // todo revisar la segunda parte de este if, es sospechosa
         if(context != null && !context.getLaunchRequests().contains(ltiLaunchRequest)) {
             context.addLaunchRequest(ltiLaunchRequest);
@@ -49,10 +48,16 @@ public class ContextServiceImpl implements ContextService {
         return this.contextRepository.save(context);
     }
 
-    public String store(LTIContext c){
+    public String storeInCache(LTIContext c){
         String secretKey = this.secretService.generateSecret();
-        this.redis.saveForClient(c, secretKey);
+        this.redis.saveLTIContext(c, secretKey);
         return secretKey;
+    }
+
+    @Override
+    public String updateAndStoreInCache(LTIContext c) {
+        LTIContext updated = this.contextRepository.save(c);
+        return this.storeInCache(updated);
     }
 
     public LTIContext get(String key){

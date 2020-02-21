@@ -19,7 +19,8 @@ public class APIClient {
 
     private static final String REGISTER_ACTIVITY_ENDPOINT = "/activity/";
     private static final String SCORE_ENDPOINT = "/score/";
-    private static final String CONTEXT_ENDPOINT = "/context/";
+    private static final String GET_CONTEXT_ENDPOINT = "/context/?id={id}&secret={secret}";
+    private static final String POST_CONTEXT_ENDPOINT = "/context/";
 
     @Value("${lti.proxy.url}")
     private String baseUrl;
@@ -55,13 +56,13 @@ public class APIClient {
         Map<String, Object> params = new HashMap<>();
         params.put("id", id);
         params.put("secret", secret);
-        var response = client.getForEntity(baseUrl + CONTEXT_ENDPOINT, LTIContext.class, params);
+        var response = client.getForEntity(baseUrl + GET_CONTEXT_ENDPOINT, LTIContext.class, params);
         return valid(response);
     }
 
     public String storeContext(LTIContext context, boolean updateInDB){
         LTIContextUpdateRequest contextUpdateRequest = new LTIContextUpdateRequest(context, updateInDB);
-        var response = client.postForEntity(baseUrl + CONTEXT_ENDPOINT, contextUpdateRequest, LTIContextUpdateResponse.class);
+        var response = client.postForEntity(baseUrl + POST_CONTEXT_ENDPOINT, contextUpdateRequest, LTIContextUpdateResponse.class);
         return valid(response).getSecret();
     }
 

@@ -21,7 +21,9 @@ public interface ContextService {
      * @param c
      * @return
      */
-    String store(LTIContext c);
+    String storeInCache(LTIContext c);
+
+    String updateAndStoreInCache(LTIContext c);
 
     /**
      * Retrieve a LTIContext by id/key, used by activities when user is redirected

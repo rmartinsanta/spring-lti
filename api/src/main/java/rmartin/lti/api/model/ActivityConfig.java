@@ -1,7 +1,6 @@
 package rmartin.lti.api.model;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -32,12 +31,9 @@ public final class ActivityConfig {
     private String activityProviderId;
 
     @Transient
-    @JsonIgnore
     private Map<String, Object> config = new HashMap<>();
 
     @JsonProperty
-    @JsonBackReference
-    @Transient
     private long ltiContextId;
 
     protected ActivityConfig() {}
@@ -55,20 +51,20 @@ public final class ActivityConfig {
 
 
     @SuppressWarnings("unchecked")
-    public <T, E extends Enum<E>> T getValue(E key){
-        return (T) config.get(key.toString());
+    public <T, E extends Enum<E>> T getValue(E key, T defaultValue){
+        return (T) config.getOrDefault(key.toString(), defaultValue);
     }
 
-    public <E extends Enum<E>> boolean getBool(E key){
-        return getValue(key);
+    public <E extends Enum<E>> boolean getBool(E key, boolean defaultValue){
+        return getValue(key, defaultValue);
     }
 
-    public <E extends Enum<E>> int getInt(E key) {
-        return getValue(key);
+    public <E extends Enum<E>> int getInt(E key, int defaultValue) {
+        return getValue(key, defaultValue);
     }
 
-    public <E extends Enum<E>> String getString(E key) {
-        return getValue(key);
+    public <E extends Enum<E>> String getString(E key, String defaultValue) {
+        return getValue(key, defaultValue);
     }
 
     public <E extends Enum<E>> void setValue(E key, Object value){

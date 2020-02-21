@@ -6,31 +6,21 @@
 <h3>Configuración de la actividad</h3>
 <hr>
 
-<div class="form-check" style="padding: 20px;">
+<form method="post" action="/end" class="form-check" style="padding: 20px;">
     {{#retryAllowed}}
-        <input class="form-check-input" type="checkbox" checked id="retryAllowed">
+        <input class="form-check-input" type="checkbox" checked name="allowRetry">
     {{/retryAllowed}}
 
     {{^retryAllowed}}
-        <input class="form-check-input" type="checkbox" id="retryAllowed">
+        <input class="form-check-input" type="checkbox" name="allowRetry">
     {{/retryAllowed}}
 
-    <input id="secretKey" type="hidden" name="secretKey" value="{{secretKey}}" >
+    <input name="secretKey" type="hidden" value="{{secretKey}}" >
 
     <label class="form-check-label" for="defaultCheck1">
         Permitir reintentos
     </label>
-</div>
+    <input class="btn btn-success" type="submit" value="Guardar configuración">
+</form>
 
 <hr>
-<button class="btn btn-success" onclick="saveConfig()">
-    Guardar configuración
-</button>
-<script>
-    function saveConfig() {
-        var allowRetry = $('#retryAllowed').is(':checked');
-        var secretKey = $('#secretKey').val();
-        console.log(allowRetry);
-        jQuery.post("/test/allowRetry", {allowRetry: allowRetry, secretKey: secretKey});
-    }
-</script>

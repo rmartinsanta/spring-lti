@@ -17,11 +17,11 @@
     <h1>Bienvenido a la actividad de prueba!</h1>
 
     {{#c.isTeacher}}
-        {{>TestActivity/teacher}}
+        {{>teacher}}
     {{/c.isTeacher}}
 
     {{^c.isTeacher}}
-        {{>TestActivity/student}}
+        {{>student}}
     {{/c.isTeacher}}
 </div>
 

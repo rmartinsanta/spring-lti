@@ -19,7 +19,6 @@ public class LTIContext {
     private long id;
 
     @Transient
-    @JsonManagedReference
     private ActivityConfig config;
 
     @Transient

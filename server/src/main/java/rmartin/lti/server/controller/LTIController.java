@@ -137,7 +137,7 @@ public class LTIController {
 
         // Push data to Redis
         String publicId = launchRequest.getPublicId();
-        redis.saveForLaunch(context, publicId);
+        redis.saveLTIContext(context, publicId);
 
         // Trigger activiy launch
         return "redirect:"+activity.getUrl()+"/"+ publicId;

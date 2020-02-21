@@ -51,7 +51,7 @@ services:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_REDIS_HOST=redis
       - MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS=always
-      - LOGGING_LEVEL_ROOT=INFO
+      - LOGGING_LEVEL_ROOT=DEBUG
 
     # Explicitly wait until MySQL is ready to accept connections.
     # Because the relational DB is the slowest to start up, we do not need to explicitly wait for the rest of services.
@@ -67,8 +67,9 @@ services:
     stdin_open: true
     ports:
       - 8081:8081
+      - 5006:5005
     environment:
-      - LOGGING_LEVEL_ROOT=INFO
+      - LOGGING_LEVEL_ROOT=DEBUG
 
     # Explicitly wait until MySQL is ready to accept connections.
     # Because the relational DB is the slowest to start up, we do not need to explicitly wait for the rest of services.

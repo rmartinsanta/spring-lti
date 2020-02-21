@@ -27,11 +27,16 @@ public class ConfigServiceImpl implements ConfigService {
 
         var contextConfigMap = contextConfig.getConfig();
 
-        // Merge defaults
-        for(var e: defaultConfig.getConfig().entrySet()){
-            contextConfigMap.putIfAbsent(e.getKey(), e.getValue());
+        if(defaultConfig == null){
+            log.info(String.format("Null default config for client %s, activity %s", context.getClient(), context.getActivityProviderName()));
+        } else {
+            // Merge defaults with current config
+            for(var e: defaultConfig.getConfig().entrySet()){
+                contextConfigMap.putIfAbsent(e.getKey(), e.getValue());
+            }
+            log.debug("Merged config: " + contextConfig);
         }
-        log.debug("Merged config: " + contextConfig);
+
         context.setConfig(contextConfig);
     }
 

@@ -26,7 +26,7 @@ public class ContextService {
      * @return Context key that can be used to retrieve the context in the future.
      */
     public String storeContext(LTIContext context, boolean updated){
-        log.info("Storing context woth id: "+ context.getId());
-        return client.storeContext(context, true);
+        log.info("Storing context with id: "+ context.getId());
+        return client.storeContext(context, updated);
     }
 }
