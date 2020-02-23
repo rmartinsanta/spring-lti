@@ -8,19 +8,20 @@
 
 <form method="post" action="/updateConfig" class="form-check" style="padding: 20px;">
 
+    <div class="form-group">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="allowRetry" id="allowFalse" value="false" {{^retryAllowed}} checked {{/retryAllowed}}>
+          <label class="form-check-label" for="allowFalse">
+            No permitir reintentos
+          </label>
+        </div>
 
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="allowRetry" id="allowFalse" value="false" {{^retryAllowed}} checked {{/retryAllowed}}>
-      <label class="form-check-label" for="allowFalse">
-        Sí permitir reintentos
-      </label>
-    </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="allowRetry" id="allowTrue" value="true" {{#retryAllowed}} checked {{/retryAllowed}}>
-      <label class="form-check-label" for="allowTrue">
-        No permitir reintentos
-      </label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="allowRetry" id="allowTrue" value="true" {{#retryAllowed}} checked {{/retryAllowed}}>
+          <label class="form-check-label" for="allowTrue">
+            Si permitir reintentos
+          </label>
+        </div>
     </div>
 
     <input name="secretKey" type="hidden" value="{{secretKey}}" >

@@ -30,14 +30,13 @@ public class ContextServiceImpl implements ContextService {
                 ltiLaunchRequest.getOauthConsumerKey(),
                 ltiLaunchRequest.getUserId(),
                 ltiLaunchRequest.getRoles(),
-                ltiLaunchRequest.getContextId()
+                ltiLaunchRequest.getActivityId()
         );
 
         String key = secretService.generateSecret();
         ltiLaunchRequest.setPublicId(key);
 
-        // todo revisar la segunda parte de este if, es sospechosa
-        if(context != null && !context.getLaunchRequests().contains(ltiLaunchRequest)) {
+        if(context != null) {
             context.addLaunchRequest(ltiLaunchRequest);
             context.setModified(Instant.now().toEpochMilli());
         } else {

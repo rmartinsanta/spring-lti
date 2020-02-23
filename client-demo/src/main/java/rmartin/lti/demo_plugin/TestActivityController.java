@@ -45,6 +45,7 @@ public class TestActivityController {
         modelView.addObject("secretKey", key);
         modelView.addObject("canSubmit", this.gradeService.canSubmitScore(context));
         modelView.addObject("c", context);
+        modelView.addObject("retryAllowed", context.getConfig().getValue(ConfigKeys.CAN_RETRY, false));
 
         // Add some debug information if debug is enabled (ex: in app.properties)
         if(debug){
