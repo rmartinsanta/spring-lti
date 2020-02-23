@@ -1,4 +1,4 @@
-package rmartin.lti.demo_plugin.lti_api;
+package rmartin.lti.api.client;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,7 +72,7 @@ public class APIClient {
         return valid(response);
     }
 
-    public static <T> T valid(ResponseEntity<T> response){
+    private static <T> T valid(ResponseEntity<T> response){
         if(response.getStatusCode() != HttpStatus.OK){
             throw new APIException(response);
         }

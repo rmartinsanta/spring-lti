@@ -1,7 +1,8 @@
-package rmartin.lti.demo_plugin.lti_api;
+package rmartin.lti.demo_plugin.services;
 
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Service;
+import rmartin.lti.api.client.APIClient;
 import rmartin.lti.api.model.LTIContext;
 
 @Service
@@ -9,7 +10,6 @@ public class ContextService {
 
     private static final Logger log = Logger.getLogger(APIClient.class);
     private final APIClient client;
-
 
     public ContextService(APIClient client) {
         this.client = client;

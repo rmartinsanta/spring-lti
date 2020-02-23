@@ -13,12 +13,8 @@ public class SecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/lti/**") // Allow all requests to TestActivity controller
-//                .permitAll();
 
-        // Disable all URLs authorizations, can be changed later if necessary
+        // Allow access to all URLs, we do not have anything to hide... yet.
         http.authorizeRequests().anyRequest().permitAll();
 
         // Conflicts with Mustache templates

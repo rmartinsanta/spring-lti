@@ -13,8 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import rmartin.lti.api.model.ActivityConfig;
 import rmartin.lti.api.model.LTIContext;
 import rmartin.lti.api.service.IOUtils;
-import rmartin.lti.demo_plugin.lti_api.ContextService;
-import rmartin.lti.demo_plugin.lti_api.GradeService;
+import rmartin.lti.demo_plugin.services.ContextService;
+import rmartin.lti.demo_plugin.services.GradeService;
 
 @Controller
 public class TestActivityController {
@@ -34,9 +34,12 @@ public class TestActivityController {
         this.gradeService = gradeService;
     }
 
+    /**
+     * This method will be called when the activity is launched.
+     * The LTI proxy will redirect the user to this endpoint, as configured in the app.properties
+     */
     @GetMapping(LAUNCH_URL + "{id}")
     public ModelAndView handleActivityLaunch(ModelAndView modelView, @PathVariable String id){
-
         // Retrieve the current context
         LTIContext context = contextService.getContext(id);
 
@@ -47,7 +50,7 @@ public class TestActivityController {
         modelView.addObject("c", context);
         modelView.addObject("retryAllowed", context.getConfig().getValue(ConfigKeys.CAN_RETRY, false));
 
-        // Add some debug information if debug is enabled (ex: in app.properties)
+        // Add some debug information if debug is enabled (in app.properties)
         if(debug){
             modelView.addObject("debug", IOUtils.object2Map(context));
             modelView.addObject("isdebug", true);
@@ -59,23 +62,30 @@ public class TestActivityController {
         return modelView;
     }
 
+    /**
+     * End activity and return control to the LMS
+     * @param score
+     * @param secretKey
+     * @return
+     */
     @PostMapping("/end")
     public String endActivity(@RequestParam float score, @RequestParam String secretKey){
-        if(score < 0 || score > 1){
-            return "error/ScoreMustBeBetween0And1";
-        }
 
         LTIContext context = this.contextService.getContext(secretKey);
-        if(context == null){
-            return "error/KeyDoesNotExistOrHasAlreadyBeenUsed";
-        }
 
+        // Submit grade request
         this.gradeService.grade(context, score);
 
-        // Grade the activity, and return control to LMS
-        return "redirect:"+context.getLastRequest().getReturnUrl();
+        // Redirect back to the LMS
+        return "redirect:" + context.getLastRequest().getReturnUrl();
     }
 
+    /**
+     * Update configuration and return control to the LMS
+     * @param allowRetry
+     * @param secretKey
+     * @return
+     */
     @PostMapping("/updateConfig")
     public String setAllowRetry(@RequestParam boolean allowRetry, @RequestParam String secretKey){
         log.info("Change in TestActivity Config -- Set AllowRetry to "+allowRetry);

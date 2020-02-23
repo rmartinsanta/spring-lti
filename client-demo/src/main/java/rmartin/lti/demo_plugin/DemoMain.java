@@ -16,7 +16,6 @@ import org.springframework.context.annotation.ComponentScan;
 @EntityScan(basePackages = {"rmartin.lti"})
 public class DemoMain {
 	public static void main(String[] args) {
-		// Start SpringApp
 		SpringApplication.run(DemoMain.class, args);
 	}
 }

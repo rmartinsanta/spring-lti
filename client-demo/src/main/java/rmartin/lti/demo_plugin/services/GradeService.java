@@ -1,8 +1,8 @@
-package rmartin.lti.demo_plugin.lti_api;
+package rmartin.lti.demo_plugin.services;
 
 import org.jboss.logging.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rmartin.lti.api.client.APIClient;
 import rmartin.lti.api.exception.GradeException;
 import rmartin.lti.api.model.LTIContext;
 import rmartin.lti.api.model.LTIScoreRequest;
