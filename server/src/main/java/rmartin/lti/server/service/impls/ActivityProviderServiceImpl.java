@@ -41,6 +41,11 @@ public class ActivityProviderServiceImpl implements ActivityProviderService {
     }
 
     public ActivityProvider createActivityProvider(String name, String secret) {
+        Optional<ActivityProvider> activityProvider = repository.findByName(name);
+        if(activityProvider.isPresent()){
+            log.info(String.format("Activity provider %s already exists, skipping creation", name));
+            return activityProvider.get();
+        }
         var activity = new ActivityProvider(name, secret);
         return repository.save(activity);
     }

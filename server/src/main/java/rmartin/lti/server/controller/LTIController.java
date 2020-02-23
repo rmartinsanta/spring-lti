@@ -136,8 +136,7 @@ public class LTIController {
         configService.calculateConfig(context);
 
         // Push data to Redis
-        String publicId = launchRequest.getPublicId();
-        redis.saveLTIContext(context, publicId);
+        String publicId = contextService.storeInCache(context);
 
         // Trigger activiy launch
         return "redirect:"+activity.getUrl()+"/"+ publicId;

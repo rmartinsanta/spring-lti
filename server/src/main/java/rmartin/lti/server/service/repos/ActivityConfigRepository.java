@@ -17,5 +17,4 @@ public interface ActivityConfigRepository extends JpaRepository<ActivityConfig, 
      */
     ActivityConfig findByClientIdAndActivityProviderIdAndGlobalIsTrue(String clientId, String activityProvider);
 
-    Optional<ActivityConfig> findByLtiContextId(long contextId);
 }

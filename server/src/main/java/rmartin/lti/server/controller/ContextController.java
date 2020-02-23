@@ -43,9 +43,13 @@ public class ContextController {
 
     @PostMapping("/")
     public ResponseEntity<?> updateContext(@RequestBody LTIContextUpdateRequest request) {
-        String secret = request.isUpdateInDB()?
-            contextService.updateAndStoreInCache(request.getContext()):
-            contextService.storeInCache(request.getContext());
+        String secret;
+        if (request.isUpdateInDB()) {
+            configService.update(request.getContext().getConfig());
+            secret = contextService.updateAndStoreInCache(request.getContext());
+        } else {
+            secret = contextService.storeInCache(request.getContext());
+        }
         return ResponseEntity.ok(new LTIContextUpdateResponse(secret));
     }
 }

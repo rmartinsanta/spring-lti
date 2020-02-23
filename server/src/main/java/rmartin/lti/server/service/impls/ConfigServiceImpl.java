@@ -22,8 +22,10 @@ public class ConfigServiceImpl implements ConfigService {
     public void calculateConfig(LTIContext context) {
 
         var defaultConfig = configRepository.findByClientIdAndActivityProviderIdAndGlobalIsTrue(context.getClient(), context.getActivityProviderName());
-        var contextConfig = configRepository.findByLtiContextId(context.getId())
-                .orElseGet(() -> new ActivityConfig(context.getId(), context.getClient(), context.getActivityProviderName(), false));
+        var contextConfig = context.getConfig();
+        if(contextConfig == null){
+            contextConfig = new ActivityConfig(context.getClient(), context.getActivityProviderName(), false);
+        }
 
         var contextConfigMap = contextConfig.getConfig();
 
@@ -42,7 +44,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public void update(ActivityConfig c) {
-        log.info(String.format("Updating config info for context: %s, global: %s", c.getLtiContextId(), c.isGlobal()));
+        log.info(String.format("Updating config info for context: %s, global: %s", c.getActivityProviderId(), c.isGlobal()));
         configRepository.save(c);
     }
 }

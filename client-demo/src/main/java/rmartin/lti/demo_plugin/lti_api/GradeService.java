@@ -15,11 +15,14 @@ public class GradeService {
 
     private static final Logger logger = Logger.getLogger(GradeService.class);
 
-    @Autowired
-    APIClient client;
+    private final APIClient client;
+
+    public GradeService(APIClient client) {
+        this.client = client;
+    }
 
     public LTIScoreResponse grade(LTIContext context, float score){
-        if(canSubmitScore(context)){
+        if(!canSubmitScore(context)){
             throw new GradeException("Activity does not allow retrying and user has already been graded, context id: "+context.getId());
         }
 

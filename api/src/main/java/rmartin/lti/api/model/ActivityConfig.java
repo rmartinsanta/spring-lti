@@ -33,17 +33,13 @@ public final class ActivityConfig {
     @Transient
     private Map<String, Object> config = new HashMap<>();
 
-    @JsonProperty
-    private long ltiContextId;
-
     protected ActivityConfig() {}
 
     /**
      * Create a DEFAULT config that will be used as the base for the other configs
      * @param global save as default config for all activities for the current client
      */
-    public ActivityConfig(long ltiContextId, String clientId, String activityProviderId, boolean global) {
-        this.ltiContextId = ltiContextId;
+    public ActivityConfig(String clientId, String activityProviderId, boolean global) {
         this.clientId = clientId;
         this.activityProviderId = activityProviderId;
         this.global = global;
@@ -100,10 +96,6 @@ public final class ActivityConfig {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public long getLtiContextId() {
-        return ltiContextId;
     }
 
     public long getId() {

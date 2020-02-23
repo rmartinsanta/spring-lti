@@ -18,15 +18,13 @@ public class LTIContext {
     @GeneratedValue
     private long id;
 
-    @Transient
+    @ManyToOne
     private ActivityConfig config;
 
-    @Transient
     public ActivityConfig getConfig() {
         return config;
     }
 
-    @Transient
     public void setConfig(ActivityConfig config) {
         this.config = config;
     }
