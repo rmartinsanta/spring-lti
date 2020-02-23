@@ -23,8 +23,6 @@ public interface ContextService {
      */
     String storeInCache(LTIContext c);
 
-    String updateAndStoreInCache(LTIContext c);
-
     /**
      * Retrieve a LTIContext by id/key, used by activities when user is redirected
      * @param key

@@ -15,12 +15,30 @@ public class RegisterActivityRequest {
     @JsonProperty("secret")
     private String secret;
 
-    protected RegisterActivityRequest() {
-    }
+    @JsonProperty("default_config")
+    private ActivityConfig defaultConfig;
 
-    public RegisterActivityRequest(String activityName, String url) {
+    protected RegisterActivityRequest() { }
+
+    /**
+     * Register activity using a specific config.
+     * @param activityName our activity name
+     * @param url our url, used by the proxy to redirect the requests
+     * @param defaultConfig default config
+     */
+    public RegisterActivityRequest(String activityName, String url, ActivityConfig defaultConfig) {
         this.activityName = activityName;
         this.url = url;
+        this.defaultConfig = defaultConfig;
+    }
+
+    /**
+     * Register activity DTO. Uses empty config.
+     * @param activityName our name
+     * @param url our url, used by the proxy to redirect the requests
+     */
+    public RegisterActivityRequest(String activityName, String url){
+        this(activityName, url, new ActivityConfig(activityName));
     }
 
     public String getActivityName() {

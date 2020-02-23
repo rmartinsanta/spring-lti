@@ -21,12 +21,22 @@ public class ContextService {
     }
 
     /**
-     * Saves changes to the context in the DB if neccessary, stores context for later use in the cache.
+     * Saves changes to the config in the DB if neccessary, stores context for later use in the cache.
      * @param context LTIContext
      * @return Context key that can be used to retrieve the context in the future.
      */
-    public String storeContext(LTIContext context, boolean updated){
+    public String storeContext(LTIContext context, boolean updateConfig){
         log.info("Storing context with id: "+ context.getId());
-        return client.storeContext(context, updated);
+        return client.storeContext(context, updateConfig);
+    }
+
+    /**
+     * Saves changes to the config in the DB if neccessary, stores context for later use in the cache.
+     * @param context LTIContext
+     * @return Context key that can be used to retrieve the context in the future.
+     */
+    public String storeContext(LTIContext context){
+        log.info("Storing context with id: "+ context.getId());
+        return client.storeContext(context, false);
     }
 }

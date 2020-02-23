@@ -42,14 +42,12 @@ public class ContextController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> updateContext(@RequestBody LTIContextUpdateRequest request) {
+    public LTIContextUpdateResponse storeContext(@RequestBody LTIContextUpdateRequest request) {
         String secret;
         if (request.isUpdateInDB()) {
-            configService.update(request.getContext().getConfig());
-            secret = contextService.updateAndStoreInCache(request.getContext());
-        } else {
-            secret = contextService.storeInCache(request.getContext());
+            configService.update(request.getContext());
         }
-        return ResponseEntity.ok(new LTIContextUpdateResponse(secret));
+        secret = contextService.storeInCache(request.getContext());
+        return new LTIContextUpdateResponse(secret);
     }
 }

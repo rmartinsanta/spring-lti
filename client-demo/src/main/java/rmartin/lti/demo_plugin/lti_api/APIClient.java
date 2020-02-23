@@ -60,8 +60,8 @@ public class APIClient {
         return valid(response);
     }
 
-    public String storeContext(LTIContext context, boolean updateInDB){
-        LTIContextUpdateRequest contextUpdateRequest = new LTIContextUpdateRequest(context, updateInDB);
+    public String storeContext(LTIContext context, boolean updateConfig){
+        var contextUpdateRequest = new LTIContextUpdateRequest(context, updateConfig);
         var response = client.postForEntity(baseUrl + POST_CONTEXT_ENDPOINT, contextUpdateRequest, LTIContextUpdateResponse.class);
         return valid(response).getSecret();
     }

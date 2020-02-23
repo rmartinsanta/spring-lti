@@ -54,12 +54,6 @@ public class ContextServiceImpl implements ContextService {
         return secretKey;
     }
 
-    @Override
-    public String updateAndStoreInCache(LTIContext c) {
-        LTIContext updated = this.contextRepository.save(c);
-        return this.storeInCache(updated);
-    }
-
     public LTIContext get(String key){
         return redis.getLTIContext(key);
     }

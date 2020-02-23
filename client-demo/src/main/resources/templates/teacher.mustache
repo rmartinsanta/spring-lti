@@ -7,19 +7,24 @@
 <hr>
 
 <form method="post" action="/updateConfig" class="form-check" style="padding: 20px;">
-    {{#retryAllowed}}
-        <input class="form-check-input" type="checkbox" checked name="allowRetry">
-    {{/retryAllowed}}
 
-    {{^retryAllowed}}
-        <input class="form-check-input" type="checkbox" name="allowRetry">
-    {{/retryAllowed}}
+
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="allowRetry" id="allowFalse" value="false" {{^retryAllowed}} checked {{/retryAllowed}}>
+      <label class="form-check-label" for="allowFalse">
+        Sí permitir reintentos
+      </label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="allowRetry" id="allowTrue" value="true" {{#retryAllowed}} checked {{/retryAllowed}}>
+      <label class="form-check-label" for="allowTrue">
+        No permitir reintentos
+      </label>
+    </div>
 
     <input name="secretKey" type="hidden" value="{{secretKey}}" >
 
-    <label class="form-check-label" for="defaultCheck1">
-        Permitir reintentos
-    </label>
     <input class="btn btn-success" type="submit" value="Guardar configuración">
 </form>
 

@@ -18,7 +18,7 @@ public class LTIContext {
     @GeneratedValue
     private long id;
 
-    @ManyToOne
+    @Transient
     private ActivityConfig config;
 
     public ActivityConfig getConfig() {
@@ -89,6 +89,10 @@ public class LTIContext {
         return List.copyOf(results);
     }
 
+    /**
+     * Each context has an unique ID. Unique per user/user_roles/origin/course/activity combination
+     * @return current context id
+     */
     public long getId() {
         return id;
     }
@@ -97,6 +101,10 @@ public class LTIContext {
         this.id = id;
     }
 
+    /**
+     * Creation date for the current context
+     * @return creation date (epoch millis)
+     */
     public long getCreat() {
         return creat;
     }
@@ -105,6 +113,10 @@ public class LTIContext {
         this.creat = creat;
     }
 
+    /**
+     * Last modified date
+     * @return last modified date (epoch millis)
+     */
     public long getModified() {
         return modif;
     }
@@ -135,6 +147,10 @@ public class LTIContext {
     }
 
 
+    /**
+     * Each origin LMS has an unique ID
+     * @return the client ID
+     */
     public String getClient() {
         return client;
     }
@@ -143,6 +159,10 @@ public class LTIContext {
         this.client = client;
     }
 
+    /**
+     * Each user is uniquely identified by the origin LMS.
+     * @return String id representing the current user. This ID is unique in any given LMS.
+     */
     public String getUserId() {
         return userId;
     }
@@ -151,6 +171,10 @@ public class LTIContext {
         this.userId = userId;
     }
 
+    /**
+     * Get current user roles, formatted as mandated by the LTI Standard.
+     * @return A string with the current user roles, created by the origin LMS.
+     */
     public String getRoles() {
         return roles;
     }
@@ -167,6 +191,10 @@ public class LTIContext {
         this.resourceId = resourceId;
     }
 
+    /**
+     * Each context is associated with an origin LMS and an activity destination. Get the current activity name.
+     * @return Current activity name.
+     */
     public String getActivityProviderName() {
         return activityProviderName;
     }
@@ -175,16 +203,28 @@ public class LTIContext {
         this.activityProviderName = activityProviderName;
     }
 
+    /**
+     * Check if the user has the teacher role in the origin LMS.
+     * @return True if the current user is a teacher, false otherwise
+     */
     @JsonIgnore
     public boolean isTeacher() {
         return this.roles.toLowerCase().contains("instructor");
     }
 
+    /**
+     * Check if the user has admin privileges in the origin LMS.
+     * @return True if the current user is an admin, false otherwise
+     */
     @JsonIgnore
     public boolean isAdmin() {
         return this.roles.toLowerCase().contains("administrator");
     }
 
+    /**
+     * Check if the user has admin or teacher privileges in the origin LMS.
+     * @return True if the current user is a teacher or an admin
+     */
     @JsonIgnore
     public boolean isPrivileged() {
         return isAdmin() || isTeacher();

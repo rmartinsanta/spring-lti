@@ -1,6 +1,5 @@
 package rmartin.lti.api.service;
 
-import rmartin.lti.api.model.ActivityConfig;
 import rmartin.lti.api.model.LTIContext;
 
 /**
@@ -16,8 +15,8 @@ public interface ConfigService {
 
     /**
      * Sync config modifications to the persistent storage.
-     * @param c Modified config
+     * @param context Modified config
      */
-    void update(ActivityConfig c);
+    void update(LTIContext context);
 
 }

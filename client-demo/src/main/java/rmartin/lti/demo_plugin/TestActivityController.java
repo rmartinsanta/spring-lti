@@ -3,6 +3,7 @@ package rmartin.lti.demo_plugin;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +41,7 @@ public class TestActivityController {
         LTIContext context = contextService.getContext(id);
 
         // We have not made any changes, but we want to access the context later, save it.
-        String key = contextService.storeContext(context, false);
+        String key = contextService.storeContext(context);
         modelView.addObject("secretKey", key);
         modelView.addObject("canSubmit", this.gradeService.canSubmitScore(context));
         modelView.addObject("c", context);
@@ -78,10 +79,16 @@ public class TestActivityController {
     public String setAllowRetry(@RequestParam boolean allowRetry, @RequestParam String secretKey){
         log.info("Change in TestActivity Config -- Set AllowRetry to "+allowRetry);
         LTIContext context = contextService.getContext(secretKey);
+        if(!context.isPrivileged()){
+            throw new AccessDeniedException("Only teachers or admins can update the activity config");
+        }
         ActivityConfig config = context.getConfig();
         config.setValue(ConfigKeys.CAN_RETRY, allowRetry);
         String newKey = contextService.storeContext(context, true);
-        return "redirect:" + LAUNCH_URL + newKey;
+        //return "redirect:" + LAUNCH_URL + newKey;
+
+        // Redirect back to the LMS after the config has been successfully updated
+        return "redirect:" +context.getLastRequest().getReturnUrl();
     }
 }
 

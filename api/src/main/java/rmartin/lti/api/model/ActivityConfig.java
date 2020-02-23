@@ -30,21 +30,31 @@ public final class ActivityConfig {
     @JsonProperty
     private String activityProviderId;
 
+    @JsonProperty
+    private String resourceId;
+
     @Transient
     private Map<String, Object> config = new HashMap<>();
 
     protected ActivityConfig() {}
 
     /**
-     * Create a DEFAULT config that will be used as the base for the other configs
-     * @param global save as default config for all activities for the current client
+     * Create a SPECIFIC config that will be used in each activity.
      */
-    public ActivityConfig(String clientId, String activityProviderId, boolean global) {
+    public ActivityConfig(String activityProviderId, String clientId, String resourceId) {
         this.clientId = clientId;
         this.activityProviderId = activityProviderId;
-        this.global = global;
+        this.resourceId = resourceId;
+        this.global = false;
     }
 
+    /**
+     * Create a DEFAULT config that will be used as the base for the rest of the configs
+     */
+    public ActivityConfig(String activityProviderId) {
+        this.activityProviderId = activityProviderId;
+        this.global = true;
+    }
 
     @SuppressWarnings("unchecked")
     public <T, E extends Enum<E>> T getValue(E key, T defaultValue){
@@ -73,7 +83,7 @@ public final class ActivityConfig {
     }
 
     @JsonIgnore
-    public Map<String, Object> getConfig(){
+    public Map<String, Object> getConfigMap(){
         return this.config;
     }
 

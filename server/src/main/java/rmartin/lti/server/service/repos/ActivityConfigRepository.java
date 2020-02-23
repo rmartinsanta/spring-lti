@@ -11,10 +11,11 @@ public interface ActivityConfigRepository extends JpaRepository<ActivityConfig, 
 
     /**
      * Find default activity config for a (client, activity provider) tuple
-     * @param clientId client id
      * @param activityProvider activity provider
      * @return Default config for the clientId and activityProvider tuple
      */
-    ActivityConfig findByClientIdAndActivityProviderIdAndGlobalIsTrue(String clientId, String activityProvider);
+    ActivityConfig findByActivityProviderIdAndGlobalIsTrue(String activityProvider);
+
+    Optional<ActivityConfig> findByActivityProviderIdAndClientIdAndResourceIdAndGlobalIsFalse(String activityProviderId, String clientId, String resourceId);
 
 }
