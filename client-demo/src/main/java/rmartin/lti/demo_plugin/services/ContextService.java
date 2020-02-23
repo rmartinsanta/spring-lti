@@ -2,7 +2,7 @@ package rmartin.lti.demo_plugin.services;
 
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Service;
-import rmartin.lti.api.client.APIClient;
+import rmartin.lti.demo_plugin.services.APIClient.APIClient;
 import rmartin.lti.api.model.LTIContext;
 
 @Service

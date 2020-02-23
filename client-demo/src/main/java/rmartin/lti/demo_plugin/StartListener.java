@@ -7,7 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import rmartin.lti.api.model.RegisterActivityRequest;
-import rmartin.lti.api.client.APIClient;
+import rmartin.lti.demo_plugin.services.APIClient.APIClient;
 
 /**
  * Register our activity in the LTI proxy when the app starts.

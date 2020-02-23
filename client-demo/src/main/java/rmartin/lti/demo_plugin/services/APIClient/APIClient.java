@@ -1,4 +1,4 @@
-package rmartin.lti.api.client;
+package rmartin.lti.demo_plugin.services.APIClient;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,25 +22,27 @@ public class APIClient {
     private static final String GET_CONTEXT_ENDPOINT = "/context/?id={id}&secret={secret}";
     private static final String POST_CONTEXT_ENDPOINT = "/context/";
 
-    @Value("${lti.proxy.url}")
+    @Value("${lti.proxy.url:}")
     private String baseUrl;
 
-    @Value("${lti.activity.secret}")
+    @Value("${lti.activity.secret:}")
     private String secret;
 
     private RestTemplate client;
 
     @PostConstruct
     public void initialize(){
-        if(baseUrl == null){
-            throw new IllegalArgumentException("Set 'lti.proxy.url' to the proxy base URL");
-        }
         this.baseUrl = this.baseUrl.trim();
         if(baseUrl.isEmpty()){
             throw new IllegalArgumentException("Set 'lti.proxy.url' to the proxy base URL");
         }
         if(this.baseUrl.endsWith("/")){
             this.baseUrl = this.baseUrl.substring(0, this.baseUrl.length() - 1);
+        }
+
+        this.secret = this.secret.trim();
+        if(this.secret.isEmpty()){
+            throw new IllegalArgumentException("Set 'lti.activity.secret' to the appropriate activity secret");
         }
         client = new RestTemplate();
     }
