@@ -4,16 +4,27 @@
 version: '3'
 services:
 
-  mysql:
-    # Provides persistent storage to the APP
+  sql-lti:
+    # Provides persistent storage to the Proxy
     image: mysql:5
-    container_name: mysql-spring
+    container_name: sql-lti
     #command: --innodb-large-prefix=on
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
-      - MYSQL_DATABASE=videoquizz
-      - MYSQL_USER=videoquizz
-      - MYSQL_PASSWORD=kpepinodeaplicacion
+      - MYSQL_DATABASE=ltiproxy
+      - MYSQL_USER=ltiproxy
+      - MYSQL_PASSWORD=ltiproxypassword
+
+  sql-demoapp:
+    # Provides persistent storage to the demo app
+    image: mysql:5
+    container_name: sql-demoapp
+    #command: --innodb-large-prefix=on
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=demoapp
+      - MYSQL_USER=demoapp
+      - MYSQL_PASSWORD=demoapppassword
 
   redis:
     # In memory database, shared data will be loaded from the
@@ -32,7 +43,7 @@ services:
   lti:
     # Core app, depends on the rest of components. Exposes API on port 8080.
     depends_on:
-      - mysql
+      - sql-lti
       - redis
       - rabbitmq
     build:
@@ -45,9 +56,9 @@ services:
       - 8080:8080
       - 5005:5005
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/videoquizz?useSSL=false
-      - SPRING_DATASOURCE_USERNAME=videoquizz
-      - SPRING_DATASOURCE_PASSWORD=kpepinodeaplicacion
+      - SPRING_DATASOURCE_URL=jdbc:mysql://sql-lti:3306/ltiproxy?useSSL=false
+      - SPRING_DATASOURCE_USERNAME=ltiproxy
+      - SPRING_DATASOURCE_PASSWORD=ltiproxypassword
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_REDIS_HOST=redis
       - MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS=always
@@ -59,6 +70,9 @@ services:
 
   demo:
     # Example lti integration.
+    depends_on:
+      - sql-demoapp
+      - lti
     build:
       dockerfile: demo.Dockerfile
       context: ../../
@@ -70,6 +84,6 @@ services:
       - 5006:5005
     environment:
       - LOGGING_LEVEL_ROOT=DEBUG
-
-    # Explicitly wait until MySQL is ready to accept connections.
-    # Because the relational DB is the slowest to start up, we do not need to explicitly wait for the rest of services.
+      - SPRING_DATASOURCE_URL=jdbc:mysql://sql-demoapp:3306/demoapp?useSSL=false
+      - SPRING_DATASOURCE_USERNAME=demoapp
+      - SPRING_DATASOURCE_PASSWORD=demoapppassword

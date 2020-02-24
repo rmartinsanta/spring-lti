@@ -6,10 +6,13 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
+// If not using any database, exclude the DataSourceAutoConfiguration.class:
 
-// We need to exclude the DataSourceAutoConfiguration.class because we do not have a valid database configuration
-// It should be removed if we include any datasource dependency inside the pom.xml, such as h2, mysql, mongo, etc
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+//@SpringBootApplication(exclude = {
+//		DataSourceAutoConfiguration.class
+//})
+
+@SpringBootApplication
 
 // Scan all entities and components that are inside any of the following packages
 @ComponentScan(basePackages = {"rmartin.lti"})
