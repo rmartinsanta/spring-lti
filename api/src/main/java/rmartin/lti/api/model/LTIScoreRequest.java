@@ -1,13 +1,21 @@
 package rmartin.lti.api.model;
 
-public class MessageDTO {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+public class LTIScoreRequest {
+
+    @JsonProperty("context")
     private LTIContext context;
+
+    @JsonProperty("score")
     private double score;
 
-    protected MessageDTO() {  }
+    @JsonProperty("secret")
+    private String secret;
 
-    public MessageDTO(LTIContext context, double score) {
+    protected LTIScoreRequest() {  }
+
+    public LTIScoreRequest(LTIContext context, double score) {
         this.context = context;
         this.score = score;
     }
@@ -28,9 +36,17 @@ public class MessageDTO {
         this.score = score;
     }
 
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
     @Override
     public String toString() {
-        return "MessageDTO{" +
+        return "LTIScoreRequest{" +
                 "context=" + context.getId() +
                 ", score=" + score +
                 '}';

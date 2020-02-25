@@ -1,10 +1,10 @@
 package rmartin.lti.api.service;
 
-import rmartin.lti.api.model.MessageDTO;
+import rmartin.lti.api.model.LTIScoreRequest;
 
 /**
  * Send a message asynchronously
  */
 public interface AsyncMessageSender {
-    void send(MessageDTO message);
+    void send(LTIScoreRequest message);
 }

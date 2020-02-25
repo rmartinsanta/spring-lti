@@ -22,10 +22,7 @@ public class RedisLaunchContextImpl implements Redis {
     @Value("${server.context.expiresIn}")
     private long expiresInMillis;
 
-    private RedisTemplate<String, LTIContext> redisContexts;
-
-    private BoundHashOperations<String, String, LTIContext> launches;
-    private BoundHashOperations<String, String, LTIContext> pendingContexts;
+    private BoundHashOperations<String, String, LTIContext> contexts;
 
     private RedisTemplate<String, String> redisTokens;
 
@@ -34,9 +31,9 @@ public class RedisLaunchContextImpl implements Redis {
     private static final String PENDING_CONTEXT_BOUND_KEY = "PendingContext";
 
     @Autowired
-    public RedisLaunchContextImpl(RedisConnectionFactory redisConnectionFactory, Jackson2JsonRedisSerializer jsonSerializer) {
+    public RedisLaunchContextImpl(RedisConnectionFactory redisConnectionFactory, Jackson2JsonRedisSerializer<?> jsonSerializer) {
 
-        this.redisContexts = new RedisTemplate<>();
+        RedisTemplate<String, LTIContext> redisContexts = new RedisTemplate<>();
         redisContexts.setConnectionFactory(redisConnectionFactory);
         redisContexts.setKeySerializer(new StringRedisSerializer());
         redisContexts.setHashKeySerializer(new StringRedisSerializer());
@@ -44,8 +41,7 @@ public class RedisLaunchContextImpl implements Redis {
         redisContexts.setHashValueSerializer(jsonSerializer);
         redisContexts.afterPropertiesSet();
 
-        this.launches = redisContexts.boundHashOps(CONTEXT_BOUND_KEY);
-        this.pendingContexts = redisContexts.boundHashOps(PENDING_CONTEXT_BOUND_KEY);
+        this.contexts = redisContexts.boundHashOps(CONTEXT_BOUND_KEY);
 
         this.redisTokens = new RedisTemplate<>();
         redisTokens.setConnectionFactory(redisConnectionFactory);
@@ -58,7 +54,7 @@ public class RedisLaunchContextImpl implements Redis {
 
     @Override
     public LTIContext getLTIContext(String id){
-        LTIContext context = launches.get(id);
+        LTIContext context = contexts.get(id);
 
         if(context == null){
             throw new IllegalArgumentException("Invalid context: "+id);
@@ -73,29 +69,15 @@ public class RedisLaunchContextImpl implements Redis {
     }
 
     @Override
-    public void saveForLaunch(LTIContext context, String key){
-        launches.put(key, context);
-        //this.setExpire("Context_"+context.getId());
-        this.setExpire(key);
+    public void saveLTIContext(LTIContext context, String key){
+        contexts.put(key, context);
+        //this.setExpire(key);
     }
 
-    public void saveForClient(LTIContext context, String key){
-        pendingContexts.put(key, context);
-    }
 
+    // TODO review why this is neccesary? We can just leave the contexts there.
     private void setExpire(String key) {
         tokens.set(key, "");
         redisTokens.expire(key, expiresInMillis, TimeUnit.MILLISECONDS);
-    }
-
-    @Override
-    public LTIContext getDataClient(String key) {
-        if(this.pendingContexts.hasKey(key)){
-            LTIContext context = this.pendingContexts.get(key);
-            this.pendingContexts.delete(key);
-            return context;
-        }
-
-        return null;
     }
 }

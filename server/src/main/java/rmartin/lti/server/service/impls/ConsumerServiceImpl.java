@@ -38,6 +38,11 @@ public class ConsumerServiceImpl implements ConsumerService {
 
     @Override
     public Consumer createConsumer(String name, String password, String secret){
+        var consumer = consumerRepository.findByUsername(name);
+        if(consumer.isPresent()){
+            log.info(String.format("Consumer with name %s already exists, skipping creation", name));
+            return consumer.get();
+        }
         Consumer u = new Consumer(name, password, secret);
         consumerRepository.save(u);
         log.debug("Consumer created: " + u);

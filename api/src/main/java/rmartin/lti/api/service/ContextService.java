@@ -11,16 +11,17 @@ public interface ContextService {
     /**
      * Retrieve the context associated with a LTIRequest
      * @param ltiLaunchRequest
-     * @return
+     * @param activityName
+     * @return LTIContext
      */
-    LTIContext getOrInitialize(LTILaunchRequest ltiLaunchRequest);
+    LTIContext getOrInitialize(LTILaunchRequest ltiLaunchRequest, String activityName);
 
     /**
      * Store a
      * @param c
      * @return
      */
-    String store(LTIContext c);
+    String storeInCache(LTIContext c);
 
     /**
      * Retrieve a LTIContext by id/key, used by activities when user is redirected

@@ -1,6 +1,6 @@
 package rmartin.lti.server.service.impls;
 
-import rmartin.lti.api.model.MessageDTO;
+import rmartin.lti.api.model.LTIScoreRequest;
 import rmartin.lti.api.service.AsyncMessageListener;
 import rmartin.lti.server.service.GradeService;
 import org.jboss.logging.Logger;
@@ -22,10 +22,10 @@ public class AsyncMessageListenerImpl implements AsyncMessageListener {
 
     @Override
     @RabbitListener(queues = "pendingscores")
-    public void processMessage(MessageDTO message) {
+    public void processMessage(LTIScoreRequest message) {
 
         logger.info("Recieved message: "+message);
-        // MessageDTO can hav ea type, we can launch different actions depending on the message type blabla
+        // LTIScoreRequest can hav ea type, we can launch different actions depending on the message type blabla
 
         if(message.getScore() < 0 || message.getScore() > 1)
             // Or send to error queue instead of triggering exception

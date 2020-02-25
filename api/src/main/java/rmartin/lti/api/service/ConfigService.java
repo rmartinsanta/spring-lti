@@ -1,7 +1,6 @@
 package rmartin.lti.api.service;
 
-import rmartin.lti.api.model.ActivityConfig;
-import rmartin.lti.api.model.LTILaunchRequest;
+import rmartin.lti.api.model.LTIContext;
 
 /**
  * Provides functionality related with the configuration of the available activities
@@ -10,14 +9,14 @@ public interface ConfigService {
 
     /**
      * Returns the appropiate configuration for the given request
-     * @param ltiLaunchRequest LTIRequest or context whose config we want to retrieve
-     * @return returns the config associated with the given request
+     * @param context LTIRequest or context whose config we want to retrieve
      */
-    ActivityConfig getOrInitialize(LTILaunchRequest ltiLaunchRequest);
+    void calculateConfig(LTIContext context);
 
     /**
-     * Sync config modifications to the persistent storage. UNSAVED CHANGES ARE LOST WHEN THE REQUEST ENDS.
-     * @param c Modified config
+     * Sync config modifications to the persistent storage.
+     * @param context Modified config
      */
-    void save(ActivityConfig c);
+    void update(LTIContext context);
+
 }

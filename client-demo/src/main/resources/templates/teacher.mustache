@@ -1,0 +1,32 @@
+<div class="alert alert-warning" role="alert">
+    Sólo los alumnos están autorizados a asignarse una nota, si quieres asignarte una nota a tí mismo accede con el rol alumno.
+    <a href="https://docs.moodle.org/35/en/Switch_roles">Como hacerlo en Moodle </a>
+</div>
+
+<h3>Configuración de la actividad</h3>
+<hr>
+
+<form method="post" action="/updateConfig" class="form-check" style="padding: 20px;">
+
+    <div class="form-group">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="allowRetry" id="allowFalse" value="false" {{^retryAllowed}} checked {{/retryAllowed}}>
+          <label class="form-check-label" for="allowFalse">
+            No permitir reintentos
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="allowRetry" id="allowTrue" value="true" {{#retryAllowed}} checked {{/retryAllowed}}>
+          <label class="form-check-label" for="allowTrue">
+            Si permitir reintentos
+          </label>
+        </div>
+    </div>
+
+    <input name="secretKey" type="hidden" value="{{secretKey}}" >
+
+    <input class="btn btn-success" type="submit" value="Guardar configuración">
+</form>
+
+<hr>

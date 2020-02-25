@@ -2,98 +2,104 @@ package rmartin.lti.demo_plugin;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import rmartin.lti.api.model.Activity;
 import rmartin.lti.api.model.ActivityConfig;
 import rmartin.lti.api.model.LTIContext;
-import rmartin.lti.api.model.enums.ConfigKeys;
-import rmartin.lti.api.service.ConfigService;
-import rmartin.lti.api.service.ContextService;
 import rmartin.lti.api.service.IOUtils;
-
-import static rmartin.lti.demo_plugin.TestActivityController.ACTIVITY_ID;
+import rmartin.lti.demo_plugin.services.ContextService;
+import rmartin.lti.demo_plugin.services.GradeService;
 
 @Controller
-@RequestMapping("/"+ACTIVITY_ID)
-public class TestActivityController extends Activity {
+public class TestActivityController {
 
-    public static final String ACTIVITY_ID = "test";
+    public static final String LAUNCH_URL = "/lti/start/";
     private static final Logger log  = Logger.getLogger(TestActivityController.class);
 
     private final ContextService contextService;
-    private final ConfigService configService;
+    private final GradeService gradeService;
+
+    @Value("${lti.activity.debug}")
+    private boolean debug;
 
     @Autowired
-    public TestActivityController(ContextService contextService, ConfigService configService) {
+    public TestActivityController(ContextService contextService, GradeService gradeService) {
         this.contextService = contextService;
-        this.configService = configService;
+        this.gradeService = gradeService;
     }
 
-    @Override
-    public String getactivityId() {
-        return ACTIVITY_ID;
-    }
-
-    @GetMapping("/{id}")
+    /**
+     * This method will be called when the activity is launched.
+     * The LTI proxy will redirect the user to this endpoint, as configured in the app.properties
+     */
+    @GetMapping(LAUNCH_URL + "{id}")
     public ModelAndView handleActivityLaunch(ModelAndView modelView, @PathVariable String id){
+        // Retrieve the current context
+        LTIContext context = contextService.getContext(id);
 
-        LTIContext context = this.getContext(id);
-        modelView.setViewName("TestActivity/index");
-
-        modelView.addObject("canSubmit", !cannotRetry(context));
-        modelView.addObject("canSubmit", context.getConfig().getBool(ConfigKeys.CAN_RETRY));
-        modelView.addObject("postUrl", "/"+ACTIVITY_ID+"/end");
-
+        // We have not made any changes, but we want to access the context later, save it.
+        String key = contextService.storeContext(context);
+        modelView.addObject("secretKey", key);
+        modelView.addObject("canSubmit", this.gradeService.canSubmitScore(context));
         modelView.addObject("c", context);
+        modelView.addObject("retryAllowed", context.getConfig().getValue(ConfigKeys.CAN_RETRY, false));
 
-        if(isDebugEnabled()){
+        // Add some debug information if debug is enabled (in app.properties)
+        if(debug){
             modelView.addObject("debug", IOUtils.object2Map(context));
             modelView.addObject("isdebug", true);
-
             modelView.addObject("requests", context.getLaunchRequests());
         }
 
-        // After the launch, we consumed the context data from Redis.
-        // We can reuse Redis to store in use contexts, BUT under a different key only known by us and the current view
-
-        String secretKey = contextService.store(context);
-
-        modelView.addObject("secretKey", secretKey);
-
+        // Render the index.mustache file
+        modelView.setViewName("index");
         return modelView;
     }
 
+    /**
+     * End activity and return control to the LMS
+     * @param score
+     * @param secretKey
+     * @return
+     */
     @PostMapping("/end")
     public String endActivity(@RequestParam float score, @RequestParam String secretKey){
-        if(score < 0 || score > 1){
-            return "ScoreMustBeBetween0And1";
-        }
 
-        LTIContext context = this.contextService.get(secretKey);
-        if(context == null){
-            return "KeyDoesNotExistOrHasAlreadyBeenUsed";
-        }
+        LTIContext context = this.contextService.getContext(secretKey);
 
+        // Submit grade request
+        this.gradeService.grade(context, score);
 
-//        if(!context.getConfig().getBool(DemoConfig.CAN_RETRY) && !context.getResults().isEmpty()){
-//            throw new GradeException("Retry is disabled and a result has already been submitted");
-//        }
-
-        this.grade(context, score);
-        // Grade the activity, and return control to LMS
-        return "redirect:"+context.getLastRequest().getReturnUrl();
+        // Redirect back to the LMS
+        return "redirect:" + context.getLastRequest().getReturnUrl();
     }
 
-    @PostMapping("/allowRetry")
-    public ResponseEntity setAllowRetry(boolean allowRetry, String secretKey){
+    /**
+     * Update configuration and return control to the LMS
+     * @param allowRetry
+     * @param secretKey
+     * @return
+     */
+    @PostMapping("/updateConfig")
+    public String setAllowRetry(@RequestParam boolean allowRetry, @RequestParam String secretKey){
         log.info("Change in TestActivity Config -- Set AllowRetry to "+allowRetry);
-        ActivityConfig config = contextService.get(secretKey).getConfig();
+        LTIContext context = contextService.getContext(secretKey);
+        if(!context.isPrivileged()){
+            throw new AccessDeniedException("Only teachers or admins can update the activity config");
+        }
+        ActivityConfig config = context.getConfig();
         config.setValue(ConfigKeys.CAN_RETRY, allowRetry);
-        configService.save(config);
-        return ResponseEntity.ok().build();
+        String newKey = contextService.storeContext(context, true);
+        //return "redirect:" + LAUNCH_URL + newKey;
+
+        // Redirect back to the LMS after the config has been successfully updated
+        return "redirect:" +context.getLastRequest().getReturnUrl();
     }
 }
 
