@@ -16,7 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 // Scan all entities and components that are inside any of the following packages
 @ComponentScan(basePackages = {"rmartin.lti"})
-@EntityScan(basePackages = {"rmartin.lti"})
+@EntityScan(basePackages = {"rmartin.lti.demo_plugin"})
 public class DemoMain {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoMain.class, args);

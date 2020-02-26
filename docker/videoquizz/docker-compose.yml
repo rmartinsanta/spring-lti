@@ -25,6 +25,10 @@ services:
       - MYSQL_DATABASE=demoapp
       - MYSQL_USER=demoapp
       - MYSQL_PASSWORD=demoapppassword
+    ports:
+      - 3307:3306
+    volumes:
+      - demoappsql:/var/lib/mysql
 
   redis:
     # In memory database, shared data will be loaded from the
@@ -87,3 +91,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://sql-demoapp:3306/demoapp?useSSL=false
       - SPRING_DATASOURCE_USERNAME=demoapp
       - SPRING_DATASOURCE_PASSWORD=demoapppassword
+
+# Persistencia
+volumes:
+  demoappsql:
