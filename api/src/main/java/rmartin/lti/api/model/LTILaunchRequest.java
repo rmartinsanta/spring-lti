@@ -2,22 +2,28 @@ package rmartin.lti.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import rmartin.lti.api.exception.InvalidParameterException;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.*;
 
 @Entity
+@Access(AccessType.FIELD)
 public class LTILaunchRequest {
 
     @Id
     @GeneratedValue
+    @JsonProperty
     private long id;
     private String publicId;
+
     @JsonIgnore
     @ManyToOne
     private LTIContext myContext;
+
     @JsonProperty("lti_version")
     private String ltiVersion;
     @JsonProperty("lti_message_type")
@@ -105,10 +111,11 @@ public class LTILaunchRequest {
     private String launchPresentationCssUrl;
     @JsonProperty("instructor")
     private boolean instructor;
+
     @JsonIgnore
     @ElementCollection
     @Column(length = 170)
-    private Map<String, String> customParams;
+    private Map<String, String> customParams = new HashMap<>();
 
     protected LTILaunchRequest() {
     }
@@ -555,13 +562,40 @@ public class LTILaunchRequest {
         return isAdmin() || isTeacher();
     }
 
-
+    @JsonIgnore
     public Map<String, String> getCustomParams() {
         return Map.copyOf(customParams);
     }
 
+    public String getCustomParam(String paramName, String defaultValue){
+        return this.customParams.getOrDefault("custom_" + paramName, defaultValue);
+    }
+
     public void setCustomParams(Map<String, String> customParams) {
         this.customParams = customParams;
+    }
+
+    @Access(AccessType.PROPERTY)
+    @JsonProperty("custom_params")
+    public String getSerializedParams(){
+        ObjectMapper om = new ObjectMapper();
+        try {
+            return om.writer().writeValueAsString(this.customParams);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setSerializedParams(String serialized){
+        // TODO review reader usage and remove typeRef
+        if(serialized == null) return;
+        ObjectMapper om = new ObjectMapper();
+        TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {};
+        try {
+            this.customParams = om.reader(HashMap.class).readValue(serialized);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void validate() throws RuntimeException {

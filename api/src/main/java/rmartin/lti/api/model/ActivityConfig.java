@@ -99,6 +99,7 @@ public final class ActivityConfig {
     }
 
     public void setSerialized(String serialized){
+        // TODO review reader usage and remove typeRef
         ObjectMapper om = new ObjectMapper();
         TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {};
         try {
