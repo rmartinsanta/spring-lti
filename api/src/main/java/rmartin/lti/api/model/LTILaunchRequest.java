@@ -604,8 +604,9 @@ public class LTILaunchRequest {
     }
 
     private void checkHost(String s, String name) {
-        if (s.toLowerCase().contains("://localhost")) {
-            throw new InvalidParameterException("Field " + name + " contains /localhost/. Access the LMS using a FQDN or an IP instead of 'localhost', or cute kittens will die.");
+        String lower = s.toLowerCase();
+        if (lower.contains("://localhost") || lower.contains("://127.0.1") || lower.contains("://[::1]")) {
+            throw new InvalidParameterException("Field " + name + " contains either localhost or the loopback ip. Access the LMS using a FQDN or a public IP.");
         }
     }
 
