@@ -3,8 +3,6 @@ language: java
 jdk:
 - openjdk11
 install:
-- docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" 
 - mvn clean package #-Dmaven.test.skip=true
 # - mv $TRAVIS_BUILD_DIR/target/server-developing.jar app.jar
 - docker build -f lti.Dockerfile -t rmartinsanta/videoquizz:latest .
-- docker push rmartinsanta/videoquizz:latest
