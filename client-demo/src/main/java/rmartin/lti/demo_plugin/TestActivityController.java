@@ -41,11 +41,8 @@ public class TestActivityController {
     @GetMapping(LAUNCH_URL + "{id}")
     public ModelAndView handleActivityLaunch(ModelAndView modelView, @PathVariable String id){
         // Retrieve the current context
-        LTIContext context = contextService.getContext(id);
+        LTIContext context = contextService.initialize(id);
 
-        // We have not made any changes, but we want to access the context later, save it.
-        String key = contextService.storeContext(context);
-        modelView.addObject("secretKey", key);
         modelView.addObject("canSubmit", this.gradeService.canSubmitScore(context));
         modelView.addObject("c", context);
         modelView.addObject("retryAllowed", context.getConfig().getValue(ConfigKeys.CAN_RETRY, false));
@@ -65,13 +62,12 @@ public class TestActivityController {
     /**
      * End activity and return control to the LMS
      * @param score
-     * @param secretKey
      * @return
      */
     @PostMapping("/end")
-    public String endActivity(@RequestParam float score, @RequestParam String secretKey){
+    public String endActivity(@RequestParam float score){
 
-        LTIContext context = this.contextService.getContext(secretKey);
+        LTIContext context = this.contextService.getContext();
 
         // Submit grade request
         this.gradeService.grade(context, score);
@@ -83,20 +79,18 @@ public class TestActivityController {
     /**
      * Update configuration and return control to the LMS
      * @param allowRetry
-     * @param secretKey
      * @return
      */
     @PostMapping("/updateConfig")
-    public String setAllowRetry(@RequestParam boolean allowRetry, @RequestParam String secretKey){
+    public String setAllowRetry(@RequestParam boolean allowRetry){
         log.info("Change in TestActivity Config -- Set AllowRetry to "+allowRetry);
-        LTIContext context = contextService.getContext(secretKey);
+        LTIContext context = contextService.getContext();
         if(!context.isPrivileged()){
             throw new AccessDeniedException("Only teachers or admins can update the activity config");
         }
         ActivityConfig config = context.getConfig();
         config.setValue(ConfigKeys.CAN_RETRY, allowRetry);
-        String newKey = contextService.storeContext(context, true);
-        //return "redirect:" + LAUNCH_URL + newKey;
+        contextService.storeContext(context, true);
 
         // Redirect back to the LMS after the config has been successfully updated
         return "redirect:" +context.getLastRequest().getReturnUrl();
