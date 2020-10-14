@@ -1,9 +1,7 @@
-# This file describes the required environment in order for the server to work properly
-# This file can be placed in any directory, and the environment can be started using the "docker-compose up" command.
+version: '2'
 
-version: '3'
 services:
-
+  # SERVICIOS PARA LTI
   sql-lti:
     # Provides persistent storage to the Proxy
     image: mysql:5
@@ -25,10 +23,10 @@ services:
       - MYSQL_DATABASE=demoapp
       - MYSQL_USER=demoapp
       - MYSQL_PASSWORD=demoapppassword
-    ports:
-      - 3307:3306
-    volumes:
-      - demoappsql:/var/lib/mysql
+    #ports:
+    #  - 3307:3306
+    #volumes:
+    #  - demoappsql:/var/lib/mysql
 
   redis:
     # In memory database, shared data will be loaded from the
@@ -58,15 +56,15 @@ services:
     stdin_open: true
     ports:
       - 8080:8080
-      - 5005:5005
+    #  - 5005:5005
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://sql-lti:3306/ltiproxy?useSSL=false
       - SPRING_DATASOURCE_USERNAME=ltiproxy
       - SPRING_DATASOURCE_PASSWORD=ltiproxypassword
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_REDIS_HOST=redis
-      - MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS=always
-      - LOGGING_LEVEL_ROOT=DEBUG
+      #  - MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS=always
+      - LOGGING_LEVEL_ROOT=INFO
 
     # Explicitly wait until MySQL is ready to accept connections.
     # Because the relational DB is the slowest to start up, we do not need to explicitly wait for the rest of services.
@@ -85,13 +83,76 @@ services:
     stdin_open: true
     ports:
       - 8081:8081
-      - 5006:5005
+    #  - 5006:5005
     environment:
-      - LOGGING_LEVEL_ROOT=DEBUG
+      - LOGGING_LEVEL_ROOT=INFO
       - SPRING_DATASOURCE_URL=jdbc:mysql://sql-demoapp:3306/demoapp?useSSL=false
       - SPRING_DATASOURCE_USERNAME=demoapp
       - SPRING_DATASOURCE_PASSWORD=demoapppassword
 
-# Persistencia
+  # SERVICIOS CTFD
+  ctfd:
+    build: .
+    user: root
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - UPLOAD_FOLDER=/var/uploads
+      - DATABASE_URL=mysql+pymysql://ctfd:ctfd@db/ctfd
+      - REDIS_URL=redis://cache:6379
+      - WORKERS=1
+      - LOG_FOLDER=/var/log/CTFd
+      - ACCESS_LOG=-
+      - ERROR_LOG=-
+      - REVERSE_PROXY=true
+    volumes:
+      - .data/CTFd/logs:/var/log/CTFd
+      - .data/CTFd/uploads:/var/uploads
+      - .:/opt/CTFd:ro
+    depends_on:
+      - db
+    networks:
+      default:
+      internal:
+
+  nginx:
+    image: nginx:1.17
+    volumes:
+      - ./conf/nginx/http.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    depends_on:
+      - ctfd
+
+  db:
+    image: mariadb:10.4.12
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=ctfd
+      - MYSQL_USER=ctfd
+      - MYSQL_PASSWORD=ctfd
+      - MYSQL_DATABASE=ctfd
+    volumes:
+      - .data/mysql:/var/lib/mysql
+    networks:
+      internal:
+    # This command is required to set important mariadb defaults
+    command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800, --log-warnings=0]
+
+  cache:
+    image: redis:4
+    restart: always
+    volumes:
+    - .data/redis:/data
+    networks:
+      internal:
+
+networks:
+  default:
+  internal:
+      internal: true
+
+# Persistencia LTI
 volumes:
   demoappsql:
