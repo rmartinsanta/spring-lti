@@ -3,16 +3,6 @@
     <deployment type="docker-compose.yml">
       <settings>
         <option name="commandLineOptions" value="--build" />
-        <option name="services">
-          <list>
-            <option value="lti" />
-            <option value="rabbitmq" />
-            <option value="redis" />
-            <option value="demo" />
-            <option value="sql-lti" />
-            <option value="sql-demoapp" />
-          </list>
-        </option>
         <option name="sourceFilePath" value="docker/videoquizz/docker-compose.yml" />
       </settings>
     </deployment>

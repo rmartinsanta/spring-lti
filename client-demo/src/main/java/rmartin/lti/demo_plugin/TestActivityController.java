@@ -13,25 +13,32 @@ import org.springframework.web.servlet.ModelAndView;
 import rmartin.lti.api.model.ActivityConfig;
 import rmartin.lti.api.model.LTIContext;
 import rmartin.lti.api.service.IOUtils;
+import rmartin.lti.demo_plugin.model.CTFdService;
 import rmartin.lti.demo_plugin.services.ContextService;
 import rmartin.lti.demo_plugin.services.GradeService;
 
 @Controller
 public class TestActivityController {
 
-    public static final String LAUNCH_URL = "/lti/start/";
+    public static final String LAUNCH_URL = "/proxy/";
     private static final Logger log  = Logger.getLogger(TestActivityController.class);
 
     private final ContextService contextService;
     private final GradeService gradeService;
 
+    private final CTFdService ctfdService;
+
     @Value("${lti.activity.debug}")
     private boolean debug;
 
+    @Value("${ctfd.loginurl}")
+    private String loginurl;
+
     @Autowired
-    public TestActivityController(ContextService contextService, GradeService gradeService) {
+    public TestActivityController(ContextService contextService, GradeService gradeService, CTFdService ctfdService) {
         this.contextService = contextService;
         this.gradeService = gradeService;
+        this.ctfdService = ctfdService;
     }
 
     /**
@@ -43,9 +50,13 @@ public class TestActivityController {
         // Retrieve the current context
         LTIContext context = contextService.initialize(id);
 
-        modelView.addObject("canSubmit", this.gradeService.canSubmitScore(context));
-        modelView.addObject("c", context);
-        modelView.addObject("retryAllowed", context.getConfig().getValue(ConfigKeys.CAN_RETRY, false));
+        var lastRequest = context.getLastRequest();
+        var user = ctfdService.searchOrRegister(lastRequest.getPersonEmail(), lastRequest.getPersonFullName());
+
+
+        modelView.addObject("loginurl", loginurl);
+        modelView.addObject("name", user.getEmail());
+        modelView.addObject("password", user.getPassword());
 
         // Add some debug information if debug is enabled (in app.properties)
         if(debug){
@@ -59,41 +70,5 @@ public class TestActivityController {
         return modelView;
     }
 
-    /**
-     * End activity and return control to the LMS
-     * @param score
-     * @return
-     */
-    @PostMapping("/end")
-    public String endActivity(@RequestParam float score){
-
-        LTIContext context = this.contextService.getContext();
-
-        // Submit grade request
-        this.gradeService.grade(context, score);
-
-        // Redirect back to the LMS
-        return "redirect:" + context.getLastRequest().getReturnUrl();
-    }
-
-    /**
-     * Update configuration and return control to the LMS
-     * @param allowRetry
-     * @return
-     */
-    @PostMapping("/updateConfig")
-    public String setAllowRetry(@RequestParam boolean allowRetry){
-        log.info("Change in TestActivity Config -- Set AllowRetry to "+allowRetry);
-        LTIContext context = contextService.getContext();
-        if(!context.isPrivileged()){
-            throw new AccessDeniedException("Only teachers or admins can update the activity config");
-        }
-        ActivityConfig config = context.getConfig();
-        config.setValue(ConfigKeys.CAN_RETRY, allowRetry);
-        contextService.storeContext(context, true);
-
-        // Redirect back to the LMS after the config has been successfully updated
-        return "redirect:" +context.getLastRequest().getReturnUrl();
-    }
 }
 

@@ -380,6 +380,9 @@ def login():
         return render_template("login.html", errors=errors)
 
 
+login._bypass_csrf = True
+
+
 @auth.route("/oauth")
 def oauth_login():
     endpoint = (

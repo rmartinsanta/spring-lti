@@ -1,0 +1,23 @@
+<h1>Conectando con el servidor de destino... Espere porfavor</h1>
+<noscript>
+    <p>¡Sin JavaScript no puedo funcionar!</p>
+</noscript>
+
+<form id="redirectForm" action="{{loginurl}}" method="POST" >
+    <input type='hidden' name='name' value='{{name}}'/>
+    <input type='hidden' name='password' value='{{password}}'/>
+</form>
+
+<script>
+    fetch('{{loginurl}}').then(function (data){
+        document.getElementById('redirectForm').submit();
+
+        //data.text().then(function (text){
+            //console.log('text:'+text);
+            //let nonce = text.match('[a-f0-9]{64}')[0];
+            //console.log('nonce:'+nonce);
+            //document.getElementById('nonce').value = nonce;
+            // document.getElementById('redirectForm').submit();
+        //});
+    });
+</script>

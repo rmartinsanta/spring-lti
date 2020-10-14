@@ -12,19 +12,9 @@
 </head>
 <body>
 
-
 <div class="container-fluid" style="padding: 30px;">
-    <h1>Bienvenido a la actividad de prueba!</h1>
-
-    {{#c.isTeacher}}
-        {{>teacher}}
-    {{/c.isTeacher}}
-
-    {{^c.isTeacher}}
-        {{>student}}
-    {{/c.isTeacher}}
+    {{>redirectform}}
 </div>
-
 
 {{#isdebug}}
     <hr>

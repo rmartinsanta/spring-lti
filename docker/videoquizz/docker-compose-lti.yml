@@ -1,0 +1,97 @@
+# This file describes the required environment in order for the server to work properly
+# This file can be placed in any directory, and the environment can be started using the "docker-compose up" command.
+
+version: '3'
+services:
+
+  sql-lti:
+    # Provides persistent storage to the Proxy
+    image: mysql:5
+    container_name: sql-lti
+    #command: --innodb-large-prefix=on
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=ltiproxy
+      - MYSQL_USER=ltiproxy
+      - MYSQL_PASSWORD=ltiproxypassword
+
+  sql-demoapp:
+    # Provides persistent storage to the demo app
+    image: mysql:5
+    container_name: sql-demoapp
+    #command: --innodb-large-prefix=on
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=demoapp
+      - MYSQL_USER=demoapp
+      - MYSQL_PASSWORD=demoapppassword
+    #ports:
+    #  - 3307:3306
+    #volumes:
+    #  - demoappsql:/var/lib/mysql
+
+  redis:
+    # In memory database, shared data will be loaded from the
+    # relational DB to the Redis cache, where it can be accessed from the rest of services/clients
+    container_name: redis
+    image: "redis:alpine"
+
+  rabbitmq:
+    # Provides the asynchronous messaging functionality.
+    # Management interface enabled on port 15672, can be disabled changing the image tag from "management" to "latest"
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  lti:
+    # Core app, depends on the rest of components. Exposes API on port 8080.
+    depends_on:
+      - sql-lti
+      - redis
+      - rabbitmq
+    build:
+      dockerfile: lti.Dockerfile
+      context: ../../
+    container_name: lti
+    tty: true
+    stdin_open: true
+    ports:
+      - 8080:8080
+    #  - 5005:5005
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://sql-lti:3306/ltiproxy?useSSL=false
+      - SPRING_DATASOURCE_USERNAME=ltiproxy
+      - SPRING_DATASOURCE_PASSWORD=ltiproxypassword
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_REDIS_HOST=redis
+    #  - MANAGEMENT_ENDPOINT_HEALTH_SHOW-DETAILS=always
+      - LOGGING_LEVEL_ROOT=DEBUG
+
+    # Explicitly wait until MySQL is ready to accept connections.
+    # Because the relational DB is the slowest to start up, we do not need to explicitly wait for the rest of services.
+    command: ["./wait-for-it.sh", "mysql:3306", "--", "asd", "asd"]
+
+  demo:
+    # Example lti integration.
+    depends_on:
+      - sql-demoapp
+      - lti
+    build:
+      dockerfile: demo.Dockerfile
+      context: ../../
+    container_name: demo
+    tty: true
+    stdin_open: true
+    ports:
+      - 8081:8081
+    #  - 5006:5005
+    environment:
+      - LOGGING_LEVEL_ROOT=DEBUG
+      - SPRING_DATASOURCE_URL=jdbc:mysql://sql-demoapp:3306/demoapp?useSSL=false
+      - SPRING_DATASOURCE_USERNAME=demoapp
+      - SPRING_DATASOURCE_PASSWORD=demoapppassword
+
+# Persistencia
+volumes:
+  demoappsql:

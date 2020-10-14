@@ -1,3 +1,2 @@
-Demo activity
-
-Autor: Raúl Martín
+CTFd Integration
+Author: Raúl Martín <raul.martin@urjc.es>
